@@ -1,0 +1,10 @@
+{% load i18n scgms %}
+<div class="table-responsive"><table class="table table-hover align-middle">
+<thead><tr><th>{% trans "Document" %}</th><th>{% trans "Type" %}</th><th>{% trans "Linked to" %}</th><th>{% trans "Version" %}</th><th>{% trans "Uploaded" %}</th><th></th></tr></thead>
+<tbody>{% for d in documents %}{% with v=d.current %}<tr>
+<td><a href="{% url 'documents:detail' d.id %}">{{ d.title|truncatechars:70 }}</a>{% if d.is_locked %} <i class="bi bi-lock-fill text-success" title="{% trans 'Approved record — locked' %}"></i>{% endif %}{% if d.is_confidential %} <span class="badge text-bg-dark">{% trans "Confidential" %}</span>{% endif %}{% if d.is_demo %} <span class="demo-tag">DEMO</span>{% endif %}<div class="small-muted">{{ v.original_name }}</div></td>
+<td class="small">{{ d.get_category_display }}</td>
+<td class="small">{% if d.task %}<a class="code" href="{% url 'governance:task' d.task.id %}">{{ d.task.code }}</a>{% elif d.decision %}<a class="code" href="{% url 'governance:decision' d.decision.id %}">{{ d.decision.code }}</a>{% elif d.meeting %}<a href="{% url 'committees:meeting' d.meeting.id %}">{% trans "Meeting" %} {{ d.meeting.number }}</a>{% else %}{{ d.committee.name|default:"" }}{% endif %}</td>
+<td class="small">v{{ v.version_no }}</td><td class="small">{{ v.uploaded_at|date:"Y-m-d" }}</td>
+<td class="text-nowrap">{% if v %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'documents:download' v.id %}" title="{% trans 'Download' %}"><i class="bi bi-download"></i></a>{% if v.extension == 'pdf' %} <a class="btn btn-sm btn-outline-secondary" target="_blank" href="{% url 'documents:download' v.id %}?inline=1" title="{% trans 'Preview' %}"><i class="bi bi-eye"></i></a>{% endif %}{% endif %}</td>
+</tr>{% endwith %}{% empty %}<tr><td colspan="6" class="empty">{% trans "No documents." %}</td></tr>{% endfor %}</tbody></table></div>

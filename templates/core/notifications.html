@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Notifications" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Notifications" %}</h1><div class="sub">{% trans "E-mail and digest preferences are in your profile." %}</div></div>
+<a class="btn btn-outline-secondary btn-sm" href="?unread=1">{% trans "Unread only" %}</a>
+<form method="post" action="{% url 'core:notifications_read_all' %}">{% csrf_token %}<button class="btn btn-outline-primary btn-sm">{% trans "Mark all as read" %}</button></form></div>
+<div class="card"><ul class="list-group list-group-flush">
+{% for n in page %}<li class="list-group-item d-flex gap-2 {% if not n.is_read %}bg-light{% endif %}">
+<i class="bi {% if 'urgent' in n.kind or 'overdue' in n.kind or n.kind == 'escalation' %}bi-exclamation-circle text-danger{% elif 'verif' in n.kind or 'review' in n.kind %}bi-patch-check text-primary{% else %}bi-bell text-secondary{% endif %}"></i>
+<div class="flex-grow-1"><a href="{% url 'core:notification_open' n.id %}" class="{% if not n.is_read %}fw-semibold{% endif %}">{{ n.title }}</a><div class="small-muted">{{ n.get_kind_display }} · {{ n.created_at|date:"Y-m-d H:i" }}</div></div></li>
+{% empty %}<li class="list-group-item empty">{% trans "No notifications." %}</li>{% endfor %}</ul></div>
+{% include "partials/pager.html" %}
+{% endblock %}

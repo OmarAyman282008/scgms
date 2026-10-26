@@ -1,0 +1,36 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{% trans "My Dashboard" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% blocktrans with n=user.display_name %}Welcome, {{ n }}{% endblocktrans %}</h1>
+<div class="sub">{% trans "Your responsibilities and everything waiting for you." %}</div></div></div>
+
+<div class="row g-2 mb-3 row-cols-2 row-cols-md-4">
+  <div class="col"><div class="kpi info"><div class="lbl">{% trans "My open tasks" %}</div><div class="val">{{ my_tasks|length }}</div></div></div>
+  <div class="col"><div class="kpi {% if reviewable %}warn{% endif %}"><div class="lbl">{% trans "Waiting for my verification" %}</div><div class="val">{{ reviewable|length }}</div></div></div>
+  <div class="col"><div class="kpi {% if mom_reviews %}warn{% endif %}"><div class="lbl">{% trans "Minutes waiting for my approval" %}</div><div class="val">{{ mom_reviews|length }}</div></div></div>
+  <div class="col"><div class="kpi {% if moms_to_upload %}crit{% endif %}"><div class="lbl">{% trans "Minutes I need to upload" %}</div><div class="val">{{ moms_to_upload|length }}</div></div></div>
+</div>
+
+<div class="row g-3">
+<div class="col-xl-8">
+  <div class="card mb-3"><div class="card-header"><i class="bi bi-list-task"></i>{% trans "My tasks" %}<a class="ms-auto small" href="{% url 'governance:tasks' %}?scope=mine">{% trans "All my tasks" %}</a></div>
+  {% with tasks=my_tasks %}{% include "partials/task_table.html" %}{% endwith %}</div>
+  {% if reviewable %}<div class="card mb-3"><div class="card-header"><i class="bi bi-patch-check"></i>{% trans "Submitted work waiting for my verification" %}</div>
+  {% with tasks=reviewable %}{% include "partials/task_table.html" %}{% endwith %}</div>{% endif %}
+  {% if my_decisions %}<div class="card mb-3"><div class="card-header"><i class="bi bi-check2-square"></i>{% trans "Decisions I am responsible for" %}</div>
+  <ul class="list-group list-group-flush">{% for d in my_decisions %}<li class="list-group-item d-flex gap-2 align-items-center"><a class="code" href="{% url 'governance:decision' d.id %}">{{ d.code }}</a><span class="flex-grow-1">{{ d.title }}</span><span class="small-muted">{{ d.target_date|default:"" }}</span>{% decision_badge d %}</li>{% endfor %}</ul></div>{% endif %}
+</div>
+<div class="col-xl-4">
+  {% if mom_reviews or moms_to_upload %}<div class="card mb-3"><div class="card-header"><i class="bi bi-file-earmark-text"></i>{% trans "Minutes of meetings" %}</div>
+  <ul class="list-group list-group-flush">
+  {% for m in mom_reviews %}<li class="list-group-item"><a href="{% url 'committees:meeting' m.meeting.id %}#mom">{% trans "Review" %}: {{ m.meeting.committee.name }}</a><div class="small-muted">{{ m.meeting.date }} · {% badge "mom" m.status %}</div></li>{% endfor %}
+  {% for m in moms_to_upload %}<li class="list-group-item"><a href="{% url 'committees:meeting' m.id %}#mom">{% trans "Upload minutes" %}: {{ m.committee.name }}</a><div class="small-muted">{{ m.date }} · {% badge "mom" m.mom.status %}</div></li>{% endfor %}
+  </ul></div>{% endif %}
+  <div class="card mb-3"><div class="card-header"><i class="bi bi-calendar-event"></i>{% trans "Upcoming meetings" %}</div>
+  <ul class="list-group list-group-flush">{% for m in upcoming %}<li class="list-group-item"><a href="{% url 'committees:meeting' m.id %}">{{ m.committee.name }}</a><div class="small-muted">{{ m.date|date:"l Y-m-d" }}{% if m.start_time %} · {{ m.start_time|time:"H:i" }}{% endif %}{% if m.venue %} · {{ m.venue }}{% endif %}</div></li>{% empty %}<li class="list-group-item muted">{% trans "No meetings in the next three weeks." %}</li>{% endfor %}</ul></div>
+  <div class="card mb-3"><div class="card-header"><i class="bi bi-diagram-3"></i>{% trans "My committees" %}</div>
+  <ul class="list-group list-group-flush">{% for r in roles %}<li class="list-group-item d-flex"><a href="{% url 'committees:detail' r.committee.id %}">{{ r.committee.name }}</a><span class="ms-auto badge text-bg-light">{{ r.role|role_label }}</span></li>{% empty %}<li class="list-group-item muted">{% trans "No committee membership." %}</li>{% endfor %}</ul></div>
+  <div class="card"><div class="card-header"><i class="bi bi-bell"></i>{% trans "Unread notifications" %}<a class="ms-auto small" href="{% url 'core:notifications' %}">{% trans "All" %}</a></div>
+  <ul class="list-group list-group-flush">{% for n in notes %}<li class="list-group-item"><a href="{% url 'core:notification_open' n.id %}">{{ n.title }}</a><div class="small-muted">{{ n.created_at|timesince }}</div></li>{% empty %}<li class="list-group-item muted">{% trans "You are all caught up." %}</li>{% endfor %}</ul></div>
+</div></div>
+{% endblock %}

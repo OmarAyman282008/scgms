@@ -1,0 +1,21 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{% trans "Create tasks" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><div class="small-muted"><a href="{% url 'governance:decision' d.id %}">{{ d.code }}</a> · {{ d.committee.name }} · {% trans "meeting" %} {{ d.meeting.number }}</div>
+<h1>{% trans "Convert decision into tasks" %}</h1>
+<div class="sub">{% trans "Information carried over from the decision is pre-filled. Review and confirm before assigning — each task stays linked to this decision and its meeting." %}</div></div>
+<div class="btn-group"><a class="btn btn-sm btn-outline-secondary {% if n == 1 %}active{% endif %}" href="?n=1">1</a><a class="btn btn-sm btn-outline-secondary {% if n == 2 %}active{% endif %}" href="?n=2">2</a><a class="btn btn-sm btn-outline-secondary {% if n == 3 %}active{% endif %}" href="?n=3">3</a><a class="btn btn-sm btn-outline-secondary {% if n == 4 %}active{% endif %}" href="?n=4">4</a></div></div>
+<div class="alert alert-light border small"><b>{{ d.title }}</b><div style="white-space:pre-line">{{ d.description }}</div><div class="mt-1">{% trans "Responsible" %}: {{ d.responsible.display_name|default:"—" }} · {% trans "Target date" %}: {{ d.target_date|default:"—" }} · {% trans "Required evidence" %}: {{ d.required_evidence|default:"—" }}</div></div>
+<form method="post">{% csrf_token %}<input type="hidden" name="count" value="{{ n }}">
+{% for i in rows %}<div class="card mb-3"><div class="card-header">{% trans "Task" %} {{ forloop.counter }}</div><div class="card-body row g-2">
+<div class="col-md-8"><label class="form-label small">{% trans "Title" %}</label><input class="form-control" name="title_{{ i }}" value="{% if n == 1 %}{{ d.title }}{% endif %}" {% if forloop.first %}required{% endif %}></div>
+<div class="col-md-2"><label class="form-label small">{% trans "Deadline" %}</label><input type="date" class="form-control" name="due_{{ i }}" value="{{ d.target_date|date:'Y-m-d' }}"></div>
+<div class="col-md-2"><label class="form-label small">{% trans "Priority" %}</label><select class="form-select" name="priority_{{ i }}">{% for v, l in priorities %}<option value="{{ v }}" {% if v == d.priority %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-6"><label class="form-label small">{% trans "Description" %}</label><textarea class="form-control" rows="3" name="description_{{ i }}">{{ d.description }}</textarea></div>
+<div class="col-md-3"><label class="form-label small">{% trans "Responsible member(s)" %}</label><select class="form-select" multiple size="5" name="assignees_{{ i }}">{% for u in members %}<option value="{{ u.id }}" {% if u.id == d.responsible_id %}selected{% endif %}>{{ u.display_name }}</option>{% endfor %}</select></div>
+<div class="col-md-3"><label class="form-label small">{% trans "Expected deliverables" %}</label><textarea class="form-control" rows="2" name="deliverables_{{ i }}">{{ d.required_evidence }}</textarea>
+<label class="form-label small mt-1">{% trans "Final reviewer" %}</label><select class="form-select form-select-sm" name="reviewer_{{ i }}"><option value="">{% trans "Committee chair (default)" %}</option>{% for u in members %}<option value="{{ u.id }}">{{ u.display_name }}</option>{% endfor %}</select></div>
+</div></div>{% endfor %}
+<button class="btn btn-primary"><i class="bi bi-check2"></i> {% trans "Confirm and assign" %}</button> <a class="btn btn-link" href="{% url 'governance:decision' d.id %}">{% trans "Cancel" %}</a>
+</form>
+{% endblock %}

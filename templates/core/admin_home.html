@@ -1,0 +1,16 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Administration & Settings" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Administration & Settings" %}</h1></div></div>
+<div class="row g-3 row-cols-1 row-cols-md-3">
+  <div class="col"><a class="kpi" href="{% url 'accounts:users' %}"><div class="lbl"><i class="bi bi-people"></i> {% trans "Users and school roles" %}</div><div class="hint">{% trans "Create accounts, reset passwords, set Dean / Vice-Dean / Administrator roles." %}</div></a></div>
+  <div class="col"><a class="kpi" href="{% url 'committees:list' %}"><div class="lbl"><i class="bi bi-diagram-3"></i> {% trans "Committees and membership" %}</div><div class="hint">{% trans "Establish committees, assign chairs, secretaries and members." %}</div></a></div>
+  <div class="col"><a class="kpi" href="{% url 'documents:templates' %}"><div class="lbl"><i class="bi bi-file-earmark-word"></i> {% trans "Approved MOM template" %}</div><div class="hint">{% trans "Upload or replace the institutional template; earlier versions are kept." %}</div></a></div>
+  <div class="col"><a class="kpi" href="{% url 'core:settings' %}"><div class="lbl"><i class="bi bi-sliders"></i> {% trans "Policy settings and KPI weights" %}</div><div class="hint">{% trans "MOM approval route, grace period, reminders, e-mail, score weights." %}</div></a></div>
+  <div class="col"><a class="kpi" href="{% url 'core:audit' %}"><div class="lbl"><i class="bi bi-journal-text"></i> {% trans "Audit log" %}</div><div class="hint">{% trans "Every approval, verification and change, with who and when." %}</div></a></div>
+  {% if is_admin %}<div class="col"><a class="kpi" href="/django-admin/"><div class="lbl"><i class="bi bi-tools"></i> {% trans "Advanced data administration" %}</div><div class="hint">{% trans "Academic years, semesters and raw records (system administrator)." %}</div></a></div>{% endif %}
+</div>
+<div class="card mt-3"><div class="card-header">{% trans "Academic years" %}</div><ul class="list-group list-group-flush">
+{% for y in years %}<li class="list-group-item"><b>{{ y.name }}</b> {% if y.is_current %}<span class="badge text-bg-primary">{% trans "Current" %}</span>{% endif %} <span class="small-muted">{{ y.start_date }} → {{ y.end_date }}</span>
+<div class="small">{% for s in y.semesters.all %}{{ s }} ({{ s.start_date }} → {{ s.end_date }}){% if not forloop.last %} · {% endif %}{% endfor %}</div></li>{% endfor %}</ul></div>
+{% endblock %}

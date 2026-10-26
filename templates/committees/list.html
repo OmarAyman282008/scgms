@@ -1,0 +1,22 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{% trans "Committees" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Committees" %}</h1><div class="sub">{% trans "Performance for the academic year" %} {{ year.name }} · {% trans "click a committee to open its workspace" %}</div></div>
+{% if is_exec or is_admin %}<a class="btn btn-primary" href="{% url 'committees:new' %}"><i class="bi bi-plus-lg"></i> {% trans "Establish committee" %}</a>{% endif %}</div>
+<div class="row g-3 row-cols-1 row-cols-md-2 row-cols-xxl-3">
+{% for k in kpis %}{% with c=k.committee %}
+<div class="col"><a class="card h-100 text-body" href="{% url 'committees:detail' c.id %}"><div class="card-body">
+  <div class="d-flex gap-2 align-items-start"><div class="flex-grow-1"><h2 class="h6 fw-bold mb-0">{{ c.name }}</h2><div class="small-muted">{{ c.other_name }} · <span class="code">{{ c.code }}</span></div></div>{% badge "health" k.health %}</div>
+  <div class="small mt-2"><i class="bi bi-person-badge"></i> {% trans "Chair" %}: {{ c.chair.display_name|default:"—" }} · {{ c.active_memberships.count }} {% trans "members" %}</div>
+  <div class="row text-center g-1 mt-2">
+    <div class="col"><div class="fw-bold fs-5">{{ k.score|pct }}</div><div class="small-muted">{% trans "Score" %}</div></div>
+    <div class="col"><div class="fw-bold fs-5">{{ k.decisions_open }}</div><div class="small-muted">{% trans "Open decisions" %}</div></div>
+    <div class="col"><div class="fw-bold fs-5 {% if k.overdue_tasks %}text-danger{% endif %}">{{ k.overdue_tasks }}</div><div class="small-muted">{% trans "Overdue tasks" %}</div></div>
+    <div class="col"><div class="fw-bold fs-5">{{ k.meetings_held }}/{{ k.meetings_scheduled }}</div><div class="small-muted">{% trans "Meetings" %}</div></div>
+  </div>
+  <div class="small-muted mt-2">{% if c.has_schedule %}<i class="bi bi-calendar3"></i> {{ c.get_meeting_frequency_display }}{% else %}<i class="bi bi-calendar-x"></i> {% trans "Meeting schedule not set" %}{% endif %} · {{ c.get_report_frequency_display }}</div>
+</div></a></div>
+{% endwith %}{% endfor %}
+</div>
+{% if inactive %}<h2 class="h6 mt-4">{% trans "Inactive committees" %}</h2><ul>{% for c in inactive %}<li><a href="{% url 'committees:detail' c.id %}">{{ c.name }}</a></li>{% endfor %}</ul>{% endif %}
+{% endblock %}

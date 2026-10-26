@@ -1,0 +1,57 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{% trans "Management Follow-Up Center" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Management Follow-Up & Decision Center" %}</h1>
+<div class="sub">{% trans "What requires my attention today, who is responsible, and what is preventing completion?" %}</div></div>
+<a class="btn btn-danger" href="{% url 'governance:task_new' %}?urgent=1"><i class="bi bi-plus-lg"></i> {% trans "Assign Urgent Task" %}</a></div>
+{% include "partials/filters.html" %}
+<ul class="nav nav-tabs mb-3 flex-nowrap overflow-auto">
+<li class="nav-item"><a class="nav-link {% if section == 'action' %}active{% endif %}" href="{% qs s='action' %}">{% trans "Action Required" %} <span class="badge text-bg-danger">{{ att.action_required }}</span></a></li>
+<li class="nav-item"><a class="nav-link {% if section == 'urgent' %}active{% endif %}" href="{% qs s='urgent' %}">{% trans "Urgent Tasks" %} <span class="badge text-bg-light">{{ att.urgent|length }}</span></a></li>
+<li class="nav-item"><a class="nav-link {% if section == 'pending' %}active{% endif %}" href="{% qs s='pending' %}">{% trans "Pending Decisions" %} <span class="badge text-bg-light">{{ att.pending_decisions|length }}</span></a></li>
+<li class="nav-item"><a class="nav-link {% if section == 'overdue' %}active{% endif %}" href="{% qs s='overdue' %}">{% trans "Overdue Items" %} <span class="badge text-bg-light">{{ att.overdue_count }}</span></a></li>
+<li class="nav-item"><a class="nav-link {% if section == 'verify' %}active{% endif %}" href="{% qs s='verify' %}">{% trans "Pending Verification" %} <span class="badge text-bg-light">{{ att.verification|length }}</span></a></li>
+<li class="nav-item"><a class="nav-link {% if section == 'mom' %}active{% endif %}" href="{% qs s='mom' %}">{% trans "MOM Approvals" %} <span class="badge text-bg-light">{{ att.mom_approvals|length }}</span></a></li>
+<li class="nav-item"><a class="nav-link {% if section == 'esc' %}active{% endif %}" href="{% qs s='esc' %}">{% trans "Escalations" %} <span class="badge text-bg-light">{{ att.esc_count }}</span></a></li>
+<li class="nav-item"><a class="nav-link {% if section == 'closed' %}active{% endif %}" href="{% qs s='closed' %}">{% trans "Recently Closed" %}</a></li>
+</ul>
+
+{% if section == 'action' %}
+<div class="row g-3">
+ <div class="col-lg-6"><div class="card"><div class="card-header">{% trans "MOM Approvals" %}</div><ul class="list-group list-group-flush">
+ {% for m in att.mom_approvals %}<li class="list-group-item d-flex gap-2"><a class="flex-grow-1" href="{% url 'committees:meeting' m.meeting.id %}#mom">{{ m.meeting.committee.name }} · {{ m.meeting.date }}</a>{% badge "mom" m.status %}</li>{% empty %}<li class="list-group-item muted">{% trans "None" %}</li>{% endfor %}</ul></div></div>
+ <div class="col-lg-6"><div class="card"><div class="card-header">{% trans "Pending Verification" %}</div><ul class="list-group list-group-flush">
+ {% for t in att.verification %}<li class="list-group-item"><a href="{% url 'governance:task' t.id %}"><span class="code">{{ t.code }}</span> {{ t.title }}</a><div class="small-muted">{% for u in t.active_assignees %}{{ u.display_name }} {% endfor %} · {{ t.submitted_at|date:"Y-m-d" }}</div></li>{% empty %}<li class="list-group-item muted">{% trans "None" %}</li>{% endfor %}</ul></div></div>
+ <div class="col-lg-6"><div class="card"><div class="card-header">{% trans "Escalations" %}</div><ul class="list-group list-group-flush">
+ {% for e in att.escalations %}<li class="list-group-item"><a href="{% if e.task %}{% url 'governance:task' e.task.id %}{% endif %}">{% if e.task %}<span class="code">{{ e.task.code }}</span>{% endif %} {{ e.reason|truncatechars:140 }}</a><div class="small-muted">{{ e.raised_by.display_name }} · {{ e.created_at|date:"Y-m-d" }}</div></li>{% empty %}<li class="list-group-item muted">{% trans "None" %}</li>{% endfor %}</ul></div></div>
+ <div class="col-lg-6"><div class="card"><div class="card-header">{% trans "Extension and cancellation requests" %}</div><ul class="list-group list-group-flush">
+ {% for r in att.extensions %}<li class="list-group-item"><a href="{% url 'governance:task' r.task.id %}"><span class="code">{{ r.task.code }}</span> {% trans "extension to" %} {{ r.requested_due }}</a><div class="small-muted">{{ r.requested_by.display_name }}: {{ r.reason|truncatechars:100 }}</div></li>{% endfor %}
+ {% for d in att.cancellations %}<li class="list-group-item"><a href="{% url 'governance:decision' d.id %}"><span class="code">{{ d.code }}</span> {% trans "cancellation requested" %}</a><div class="small-muted">{{ d.cancel_reason|truncatechars:100 }}</div></li>{% endfor %}
+ {% if not att.extensions and not att.cancellations %}<li class="list-group-item muted">{% trans "None" %}</li>{% endif %}</ul></div></div>
+</div>
+{% elif section == 'urgent' %}<div class="card">{% with tasks=att.urgent %}{% include "partials/task_table.html" %}{% endwith %}</div>
+{% elif section == 'verify' %}<div class="card">{% with tasks=att.verification %}{% include "partials/task_table.html" %}{% endwith %}</div>
+{% elif section == 'overdue' %}
+<div class="card mb-3"><div class="card-header">{% trans "Overdue tasks" %}</div>{% with tasks=att.overdue_tasks %}{% include "partials/task_table.html" %}{% endwith %}</div>
+<div class="card"><div class="card-header">{% trans "Overdue decisions" %}</div>{% with decisions=att.overdue_decisions %}{% include "partials/decision_table.html" %}{% endwith %}</div>
+{% elif section == 'pending' %}<div class="card">{% with decisions=att.pending_decisions %}{% include "partials/decision_table.html" %}{% endwith %}</div>
+{% elif section == 'mom' %}
+<div class="card"><div class="table-responsive"><table class="table align-middle"><thead><tr><th>{% trans "Committee" %}</th><th>{% trans "Meeting" %}</th><th>{% trans "Submitted by" %}</th><th>{% trans "Submitted" %}</th><th>{% trans "Status" %}</th><th></th></tr></thead><tbody>
+{% for m in att.mom_approvals %}<tr><td>{{ m.meeting.committee.name }}</td><td>{{ m.meeting.number }} · {{ m.meeting.date }}</td><td>{{ m.submitted_by.display_name }}</td><td>{{ m.submitted_at|date:"Y-m-d H:i" }}</td><td>{% badge "mom" m.status %}</td><td><a class="btn btn-sm btn-primary" href="{% url 'committees:meeting' m.meeting.id %}#mom">{% trans "Review" %}</a></td></tr>
+{% empty %}<tr><td colspan="6" class="empty">{% trans "No minutes are waiting for approval." %}</td></tr>{% endfor %}</tbody></table></div></div>
+{% elif section == 'esc' %}
+<div class="card"><ul class="list-group list-group-flush">
+{% for e in att.escalations %}<li class="list-group-item"><div class="d-flex gap-2"><i class="bi bi-megaphone text-danger"></i><div class="flex-grow-1">
+<a href="{% if e.task %}{% url 'governance:task' e.task.id %}{% endif %}">{% if e.task %}<span class="code">{{ e.task.code }}</span> {{ e.task.title }}{% endif %}</a>
+<div>{{ e.reason }}</div><div class="small-muted">{{ e.committee.name|default:"" }} · {{ e.raised_by.display_name }} · {{ e.created_at|date:"Y-m-d H:i" }}</div></div>
+{% if e.task %}<form method="post" action="{% url 'governance:task_action' e.task.id %}" class="d-flex gap-1">{% csrf_token %}<input type="hidden" name="action" value="resolve"><input type="hidden" name="esc" value="{{ e.id }}"><input type="hidden" name="next" value="{{ request.get_full_path }}"><input class="form-control form-control-sm" name="resolution" placeholder="{% trans 'Resolution / instruction' %}" required><button class="btn btn-sm btn-success">{% trans "Resolve" %}</button></form>{% endif %}</div></li>
+{% endfor %}
+{% for r in att.extensions %}<li class="list-group-item"><div class="d-flex gap-2"><i class="bi bi-calendar-plus text-warning"></i><div class="flex-grow-1"><a href="{% url 'governance:task' r.task.id %}"><span class="code">{{ r.task.code }}</span> {{ r.task.title }}</a><div>{% trans "Requested new deadline" %}: {{ r.requested_due }} ({% trans "was" %} {{ r.current_due|default:"—" }}) — {{ r.reason }}</div><div class="small-muted">{{ r.requested_by.display_name }}</div></div>
+<form method="post" action="{% url 'governance:task_action' r.task.id %}" class="d-flex gap-1">{% csrf_token %}<input type="hidden" name="req" value="{{ r.id }}"><input type="hidden" name="next" value="{{ request.get_full_path }}"><button class="btn btn-sm btn-success" name="action" value="ext_approve">{% trans "Approve" %}</button><button class="btn btn-sm btn-outline-danger" name="action" value="ext_reject">{% trans "Reject" %}</button></form></div></li>{% endfor %}
+{% if not att.escalations and not att.extensions %}<li class="list-group-item empty">{% trans "No open escalations." %}</li>{% endif %}
+</ul></div>
+{% elif section == 'closed' %}
+<div class="row g-3"><div class="col-lg-6"><div class="card"><div class="card-header">{% trans "Verified tasks (30 days)" %}</div>{% with tasks=att.recently_closed_tasks %}{% include "partials/task_table.html" %}{% endwith %}</div></div>
+<div class="col-lg-6"><div class="card"><div class="card-header">{% trans "Implemented decisions (30 days)" %}</div>{% with decisions=att.recently_closed_decisions %}{% include "partials/decision_table.html" %}{% endwith %}</div></div></div>
+{% endif %}
+{% endblock %}

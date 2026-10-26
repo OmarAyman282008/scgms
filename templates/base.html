@@ -1,0 +1,75 @@
+{% load static i18n scgms %}<!doctype html>
+{% get_current_language as LANG %}{% get_current_language_bidi as BIDI %}
+<html lang="{{ LANG }}" dir="{% if BIDI %}rtl{% else %}ltr{% endif %}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{% block title %}{% trans "Committee Governance" %}{% endblock %} · SCGMS</title>
+<link rel="icon" href="{% static 'img/logo.jpg' %}">
+<link rel="stylesheet" href="{% if BIDI %}{% static 'vendor/bootstrap/bootstrap.rtl.min.css' %}{% else %}{% static 'vendor/bootstrap/bootstrap.min.css' %}{% endif %}">
+<link rel="stylesheet" href="{% static 'vendor/icons/bootstrap-icons.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/app.css' %}">
+{% block head %}{% endblock %}
+</head>
+<body hx-headers='{"X-CSRFToken": "{{ csrf_token }}"}'>
+{% with url=request.resolver_match.view_name %}
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="{% static 'img/logo.jpg' %}" alt="">
+    <div><b>{% trans "Committee Governance" %}</b><small>{% if BIDI %}{{ SCHOOL_NAME_AR }}{% else %}{{ SCHOOL_NAME_EN }}{% endif %}</small></div>
+  </div>
+  <nav class="nav flex-column">
+    {% if sees_everything %}
+    <a class="nav-link {% if url == 'core:overview' %}active{% endif %}" href="{% url 'core:overview' %}"><i class="bi bi-speedometer2"></i>{% trans "Executive Overview" %}</a>
+    {% endif %}
+    <a class="nav-link {% if url == 'core:me' %}active{% endif %}" href="{% url 'core:me' %}"><i class="bi bi-person-workspace"></i>{% trans "My Dashboard" %}</a>
+    <a class="nav-link {% if url == 'committees:list' or url == 'committees:detail' or url == 'committees:edit' or url == 'committees:new' %}active{% endif %}" href="{% url 'committees:list' %}"><i class="bi bi-diagram-3"></i>{% trans "Committees" %}</a>
+    <a class="nav-link {% if url == 'committees:meetings' or url == 'committees:meeting' or url == 'committees:meeting_new' or url == 'core:calendar' %}active{% endif %}" href="{% url 'committees:meetings' %}"><i class="bi bi-calendar3"></i>{% trans "Committee Meetings" %}</a>
+    <a class="nav-link {% if url == 'committees:moms' %}active{% endif %}" href="{% url 'committees:moms' %}"><i class="bi bi-file-earmark-text"></i>{% trans "MOMs & Approvals" %}</a>
+    <a class="nav-link {% if 'decision' in url %}active{% endif %}" href="{% url 'governance:decisions' %}"><i class="bi bi-check2-square"></i>{% trans "Decisions & Action Items" %}</a>
+    <a class="nav-link {% if url == 'governance:tasks' or url == 'governance:task' or url == 'governance:task_new' %}active{% endif %}" href="{% url 'governance:tasks' %}"><i class="bi bi-list-task"></i>{% trans "Task Management" %}</a>
+    {% if is_exec %}
+    <a class="nav-link {% if url == 'core:followup' %}active{% endif %}" href="{% url 'core:followup' %}"><i class="bi bi-bullseye"></i>{% trans "Management Follow-Up Center" %}</a>
+    {% endif %}
+    <a class="nav-link {% if url == 'documents:archive' or url == 'documents:detail' %}active{% endif %}" href="{% url 'documents:archive' %}"><i class="bi bi-archive"></i>{% trans "Digital Filing Archive" %}</a>
+    <a class="nav-link {% if 'reports:' in url %}active{% endif %}" href="{% url 'reports:index' %}"><i class="bi bi-bar-chart-line"></i>{% trans "Reports & Analytics" %}</a>
+    <a class="nav-link {% if url == 'core:notifications' %}active{% endif %}" href="{% url 'core:notifications' %}"><i class="bi bi-bell"></i>{% trans "Notifications" %}{% if unread_count %}<span class="badge rounded-pill text-bg-danger">{{ unread_count }}</span>{% endif %}</a>
+    {% if sees_everything %}
+    <a class="nav-link {% if url == 'core:admin_home' or url == 'core:settings' or url == 'core:audit' or 'accounts:user' in url or url == 'documents:templates' %}active{% endif %}" href="{% url 'core:admin_home' %}"><i class="bi bi-gear"></i>{% trans "Administration & Settings" %}</a>
+    {% endif %}
+  </nav>
+  <div class="foot">{% if BIDI %}{{ UNIVERSITY_AR }}{% else %}{{ UNIVERSITY_EN }}{% endif %} · SCGMS</div>
+</aside>
+{% endwith %}
+<div class="main">
+  <header class="topbar">
+    <button class="btn btn-sm btn-outline-secondary d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="{% trans 'Menu' %}"><i class="bi bi-list"></i></button>
+    <div class="flex-grow-1"></div>
+    {% if is_exec %}<a class="btn btn-sm btn-danger" href="{% url 'governance:task_new' %}?urgent=1"><i class="bi bi-lightning-charge-fill"></i> {% trans "Assign Urgent Task" %}</a>{% endif %}
+    <form action="{% url 'set_language' %}" method="post" class="m-0">{% csrf_token %}
+      <input type="hidden" name="next" value="{{ request.get_full_path }}">
+      <button class="btn btn-sm btn-outline-secondary" name="language" value="{% if BIDI %}en{% else %}ar{% endif %}">{% if BIDI %}English{% else %}العربية{% endif %}</button>
+    </form>
+    <a href="{% url 'core:notifications' %}" class="btn btn-sm btn-light position-relative" aria-label="{% trans 'Notifications' %}"><i class="bi bi-bell"></i>
+      <span hx-get="{% url 'core:notification_badge' %}" hx-trigger="every 60s" hx-swap="innerHTML">{% if unread_count %}<span class="badge rounded-pill bg-danger">{{ unread_count }}</span>{% endif %}</span></a>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown"><span class="avatar">{{ user|initials }}</span><span class="who d-none d-md-inline">{{ user.display_name }}</span></button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><span class="dropdown-item-text small-muted">{{ user.get_global_role_display }}</span></li>
+        <li><a class="dropdown-item" href="{% url 'accounts:profile' %}">{% trans "My profile" %}</a></li>
+        <li><a class="dropdown-item" href="{% url 'accounts:password_change' %}">{% trans "Change password" %}</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><form method="post" action="{% url 'accounts:logout' %}">{% csrf_token %}<button class="dropdown-item">{% trans "Log out" %}</button></form></li>
+      </ul>
+    </div>
+  </header>
+  <main class="content">
+    {% for m in messages %}<div class="alert alert-{{ m.tags|default:'info' }} alert-dismissible fade show py-2">{{ m }}<button type="button" class="btn-close" data-bs-dismiss="alert"></button></div>{% endfor %}
+    {% block content %}{% endblock %}
+  </main>
+</div>
+<script src="{% static 'vendor/bootstrap/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'vendor/htmx/htmx.min.js' %}"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

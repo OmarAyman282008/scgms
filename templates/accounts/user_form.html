@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "User" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% if obj %}{% trans "Edit user" %}{% else %}{% trans "New user" %}{% endif %}</h1>
+{% if not obj %}<div class="sub">{% blocktrans %}Default initial password: {{ initial_password }} — the user must change it at first login.{% endblocktrans %}</div>{% endif %}</div></div>
+<div class="card" style="max-width:720px"><div class="card-body"><form method="post">{% csrf_token %}
+{% for field in form %}<div class="mb-3">{% if field.name == 'is_active' %}<div class="form-check"><input type="checkbox" class="form-check-input" name="is_active" id="ia" {% if field.value %}checked{% endif %}><label class="form-check-label" for="ia">{{ field.label }}</label></div>{% else %}
+<label class="form-label">{{ field.label }}</label>
+{% if field.name == 'global_role' %}<select class="form-select" name="global_role">{% for v, l in field.field.choices %}<option value="{{ v }}" {% if field.value == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select>
+{% else %}<input class="form-control" name="{{ field.html_name }}" value="{% if field.name != 'new_password' %}{{ field.value|default_if_none:'' }}{% endif %}" {% if field.name == 'new_password' %}type="text" autocomplete="new-password"{% endif %}>{% endif %}
+{% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}{% endif %}
+{% for e in field.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>{% endfor %}
+<button class="btn btn-primary">{% trans "Save" %}</button> <a class="btn btn-link" href="{% url 'accounts:users' %}">{% trans "Cancel" %}</a>
+</form></div></div>
+{% endblock %}

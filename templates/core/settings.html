@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Settings" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Policy settings and KPI weights" %}</h1></div></div>
+<div class="row g-3"><div class="col-lg-7"><div class="card"><div class="card-body"><form method="post">{% csrf_token %}{% include "partials/form_fields.html" %}<button class="btn btn-primary">{% trans "Save" %}</button></form></div></div></div>
+<div class="col-lg-5"><div class="card"><div class="card-header">{% trans "KPI formulas" %}</div><ul class="list-group list-group-flush">
+{% for d in kpi_defs %}<li class="list-group-item"><b>{% if LANGUAGE_CODE == 'en' %}{{ d.1 }}{% else %}{{ d.2 }}{% endif %}</b><div class="small">{% if LANGUAGE_CODE == 'en' %}{{ d.3 }}{% else %}{{ d.4 }}{% endif %}</div></li>{% endfor %}
+<li class="list-group-item small">{% trans "Overall score = weighted average of the rates that have something due; rates with nothing due are left out and the remaining weights are re-scaled. Counts of meetings, decisions or tasks never raise the score." %}</li></ul></div></div></div>
+{% endblock %}

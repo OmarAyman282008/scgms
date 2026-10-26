@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Register decision" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><div class="small-muted"><a href="{% url 'committees:meeting' m.id %}#decisions">{{ m.committee.name }} · {% trans "meeting" %} {{ m.number }} · {{ m.date }}</a></div><h1>{% trans "Register a decision" %}</h1>
+<div class="sub">{% trans "The decision ID is generated automatically and linked to this meeting and its approved minutes." %}</div></div></div>
+<div class="card" style="max-width:820px"><div class="card-body"><form method="post">{% csrf_token %}{% include "partials/form_fields.html" %}
+<button class="btn btn-primary" name="next" value="meeting">{% trans "Register" %}</button> <button class="btn btn-outline-primary" name="next" value="another">{% trans "Register and add another" %}</button></form></div></div>
+{% endblock %}
+{% block scripts %}<script>document.querySelectorAll('form input:not([type=checkbox]),form select,form textarea').forEach(e=>e.classList.add(e.tagName==='SELECT'?'form-select':'form-control'))</script>{% endblock %}

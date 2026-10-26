@@ -1,0 +1,18 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{% trans "MOMs & Approvals" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "MOMs & Approvals" %}</h1><div class="sub">{% trans "Draft → Submitted → Under review → Revision required / Approved → Archived" %}</div></div></div>
+<div class="row g-3 mb-3">
+<div class="col-lg-6"><div class="card h-100"><div class="card-header"><i class="bi bi-hourglass-split text-primary"></i>{% trans "Waiting for my approval" %}<span class="ms-auto badge text-bg-primary">{{ mine|length }}</span></div>
+<ul class="list-group list-group-flush">{% for x in mine %}<li class="list-group-item d-flex gap-2 align-items-center"><div class="flex-grow-1"><a href="{% url 'committees:meeting' x.meeting.id %}#mom">{{ x.meeting.committee.name }} · {% trans "meeting" %} {{ x.meeting.number }}</a><div class="small-muted">{{ x.meeting.date }} · {{ x.submitted_by.display_name }} · {{ x.submitted_at|date:"Y-m-d" }}</div></div>{% badge "mom" x.status %}<a class="btn btn-sm btn-primary" href="{% url 'committees:meeting' x.meeting.id %}#mom">{% trans "Review" %}</a></li>
+{% empty %}<li class="list-group-item empty">{% trans "Nothing is waiting for you." %}</li>{% endfor %}</ul></div></div>
+<div class="col-lg-6"><div class="card h-100"><div class="card-header"><i class="bi bi-exclamation-triangle text-danger"></i>{% trans "Minutes not yet submitted" %}<span class="ms-auto badge text-bg-danger">{{ missing|length }}</span></div>
+<ul class="list-group list-group-flush" style="max-height:340px;overflow:auto">{% for x in missing %}<li class="list-group-item d-flex gap-2 align-items-center"><div class="flex-grow-1"><a href="{% url 'committees:meeting' x.meeting.id %}#mom">{{ x.meeting.committee.name }} · {{ x.meeting.date }}</a>{% if x.late_days > 0 %}<div class="small text-danger">{% blocktrans with n=x.late_days %}{{ n }} days past the deadline{% endblocktrans %}</div>{% else %}<div class="small-muted">{% trans "within the grace period" %}</div>{% endif %}</div>{% badge "mom" x.status %}</li>
+{% empty %}<li class="list-group-item empty">{% trans "All minutes are in." %}</li>{% endfor %}</ul></div></div></div>
+<form class="filters d-flex gap-2"><select class="form-select form-select-sm" style="max-width:280px" name="status" onchange="this.form.submit()"><option value="">{% trans "All submitted minutes" %}</option>{% for v, l in statuses %}<option value="{{ v }}" {% if st == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></form>
+<div class="card"><div class="table-responsive"><table class="table table-hover align-middle"><thead><tr><th>{% trans "Committee" %}</th><th>{% trans "Meeting" %}</th><th>{% trans "Submitted" %}</th><th>{% trans "Approved" %}</th><th>{% trans "Status" %}</th><th></th></tr></thead><tbody>
+{% for x in page %}<tr><td>{{ x.meeting.committee.name }}</td><td>{{ x.meeting.number }} · {{ x.meeting.date }}</td><td class="small">{{ x.submitted_at|date:"Y-m-d"|default:"—" }}</td><td class="small">{{ x.approved_at|date:"Y-m-d"|default:"—" }}</td><td>{% badge "mom" x.status %}</td>
+<td>{% if x.document %}{% with v=x.document.current %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'documents:download' v.id %}"><i class="bi bi-download"></i></a>{% endwith %}{% endif %} <a class="btn btn-sm btn-outline-primary" href="{% url 'committees:meeting' x.meeting.id %}#mom">{% trans "Open" %}</a></td></tr>
+{% empty %}<tr><td colspan="6" class="empty">{% trans "No minutes." %}</td></tr>{% endfor %}</tbody></table></div></div>
+{% include "partials/pager.html" %}
+{% endblock %}

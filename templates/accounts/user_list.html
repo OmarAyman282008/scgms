@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{% trans "Users" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Users" %}</h1><div class="sub">{% trans "A person can hold different roles in different committees; committee roles are set from each committee's Members tab." %}</div></div>
+{% if is_admin %}<a class="btn btn-primary" href="{% url 'accounts:user_new' %}"><i class="bi bi-person-plus"></i> {% trans "New user" %}</a>{% endif %}</div>
+<form class="filters d-flex gap-2"><input class="form-control" name="q" value="{{ q }}" placeholder="{% trans 'Search…' %}"><button class="btn btn-outline-primary">{% trans "Filter" %}</button></form>
+<div class="card"><div class="table-responsive"><table class="table table-hover align-middle">
+<thead><tr><th>{% trans "Name" %}</th><th>{% trans "Username" %}</th><th>{% trans "School role" %}</th><th>{% trans "Committee roles" %}</th><th>{% trans "Status" %}</th><th></th></tr></thead>
+<tbody>{% for u in users %}<tr>
+<td><div class="d-flex gap-2 align-items-center"><span class="avatar">{{ u|initials }}</span><div>{{ u.display_name }}<div class="small-muted">{{ u.position }}</div></div></div></td>
+<td class="code">{{ u.username }}</td><td>{{ u.get_global_role_display }}</td>
+<td class="small">{% for m in u.memberships.all %}{% if not m.end_date %}<div>{{ m.committee.name }} · <span class="muted">{{ m.role|role_label }}</span></div>{% endif %}{% endfor %}</td>
+<td>{% if not u.is_active %}<span class="badge text-bg-secondary">{% trans "Disabled" %}</span>{% elif u.must_change_password %}<span class="badge text-bg-warning">{% trans "Must change password" %}</span>{% else %}<span class="badge text-bg-success">{% trans "Active" %}</span>{% endif %}</td>
+<td>{% if is_admin %}<a class="btn btn-sm btn-outline-secondary" href="{% url 'accounts:user_edit' u.id %}">{% trans "Edit" %}</a>{% endif %}</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}

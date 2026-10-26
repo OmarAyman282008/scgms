@@ -1,0 +1,96 @@
+{% extends "base.html" %}{% load i18n static scgms %}
+{% block title %}{% trans "Executive Overview" %}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div class="grow"><h1>{% trans "Executive Overview" %}</h1>
+    <div class="sub">{% trans "What requires attention today, who is responsible, and what is preventing completion." %} · {{ f.start|date:"Y-m-d" }} → {{ f.end|date:"Y-m-d" }}</div></div>
+  <a class="btn btn-danger" href="{% url 'governance:task_new' %}?urgent=1"><i class="bi bi-plus-lg"></i> {% trans "Assign Urgent Task" %}</a>
+  <a class="btn btn-outline-primary" href="{% url 'core:followup' %}"><i class="bi bi-bullseye"></i> {% trans "Follow-Up Center" %}{% if att.action_required %} <span class="badge text-bg-danger">{{ att.action_required }}</span>{% endif %}</a>
+</div>
+{% include "partials/filters.html" %}
+
+<div class="row g-3 mb-3">
+  <div class="col-xl-7">
+    <div class="card h-100"><div class="card-header"><i class="bi bi-exclamation-diamond text-danger"></i>{% trans "Requires your attention" %}<a class="ms-auto small" href="{% url 'core:followup' %}">{% trans "Open follow-up center" %}</a></div>
+    <div class="list-group list-group-flush" style="max-height:360px;overflow:auto">
+      {% for m in att.mom_approvals %}<a class="list-group-item list-group-item-action d-flex gap-2" href="{% url 'committees:meeting' m.meeting.id %}#mom"><i class="bi bi-file-earmark-check text-primary"></i><div class="flex-grow-1">{% trans "Approve minutes" %}: {{ m.meeting.committee.name }} <span class="small-muted">· {{ m.meeting.date }} · {{ m.submitted_by.display_name }}</span></div>{% badge "mom" m.status %}</a>{% endfor %}
+      {% for t in att.verification %}<a class="list-group-item list-group-item-action d-flex gap-2" href="{% url 'governance:task' t.id %}"><i class="bi bi-patch-check text-info"></i><div class="flex-grow-1">{% trans "Verify evidence" %}: <span class="code">{{ t.code }}</span> {{ t.title }}<div class="small-muted">{% for u in t.active_assignees %}{{ u.display_name }}{% if not forloop.last %}، {% endif %}{% endfor %}</div></div>{% task_badge t %}</a>{% endfor %}
+      {% for e in att.escalations %}<a class="list-group-item list-group-item-action d-flex gap-2" href="{% if e.task %}{% url 'governance:task' e.task.id %}{% else %}#{% endif %}"><i class="bi bi-megaphone text-danger"></i><div class="flex-grow-1">{% trans "Escalation" %}: {% if e.task %}<span class="code">{{ e.task.code }}</span>{% endif %} {{ e.reason|truncatechars:110 }}<div class="small-muted">{{ e.raised_by.display_name }} · {{ e.created_at|date:"Y-m-d" }}</div></div></a>{% endfor %}
+      {% for r in att.extensions %}<a class="list-group-item list-group-item-action d-flex gap-2" href="{% url 'governance:task' r.task.id %}"><i class="bi bi-calendar-plus text-warning"></i><div class="flex-grow-1">{% trans "Extension request" %}: <span class="code">{{ r.task.code }}</span> → {{ r.requested_due }}<div class="small-muted">{{ r.requested_by.display_name }}: {{ r.reason|truncatechars:80 }}</div></div></a>{% endfor %}
+      {% for d in att.cancellations %}<a class="list-group-item list-group-item-action d-flex gap-2" href="{% url 'governance:decision' d.id %}"><i class="bi bi-x-octagon text-secondary"></i><div class="flex-grow-1">{% trans "Cancellation request" %}: <span class="code">{{ d.code }}</span> {{ d.title }}</div></a>{% endfor %}
+      {% for t in att.overdue_tasks|slice:":6" %}<a class="list-group-item list-group-item-action d-flex gap-2" href="{% url 'governance:task' t.id %}"><i class="bi bi-alarm text-danger"></i><div class="flex-grow-1"><span class="code">{{ t.code }}</span> {{ t.title }}<div class="small-muted">{% for u in t.active_assignees %}{{ u.display_name }}{% if not forloop.last %}، {% endif %}{% endfor %} · {% blocktrans with n=t.days_overdue %}{{ n }} days overdue{% endblocktrans %}</div></div>{% badge "priority" t.priority %}</a>{% endfor %}
+      {% if not att.action_required and not att.overdue_tasks %}<div class="empty"><i class="bi bi-check2-circle fs-3 text-success"></i><div>{% trans "Nothing is waiting for you right now." %}</div></div>{% endif %}
+    </div></div>
+  </div>
+  <div class="col-xl-5">
+    <div class="card h-100"><div class="card-header"><i class="bi bi-lightning-charge text-danger"></i>{% trans "Urgent management alerts" %}<span class="ms-auto badge text-bg-danger">{{ att.urgent|length }}</span></div>
+    <div class="list-group list-group-flush" style="max-height:360px;overflow:auto">
+      {% for t in att.urgent %}<a class="list-group-item list-group-item-action" href="{% url 'governance:task' t.id %}">
+        <div class="d-flex gap-2"><span class="code">{{ t.code }}</span><span class="flex-grow-1 text-truncate">{{ t.title }}</span>{% task_badge t %}</div>
+        <div class="d-flex gap-2 align-items-center mt-1"><div class="progress flex-grow-1"><div class="progress-bar {% if t.status == 'verified' %}bg-success{% endif %}" style="width:{{ t.progress }}%"></div></div><span class="small-muted">{{ t.progress }}% · {% if t.due_date %}{{ t.due_date }}{% endif %}</span></div></a>
+      {% empty %}<div class="empty">{% trans "No open urgent assignments." %}</div>{% endfor %}
+    </div></div>
+  </div>
+</div>
+
+<div class="row g-2 mb-3 row-cols-2 row-cols-md-5">
+  <div class="col"><a class="kpi" href="{% url 'committees:list' %}"><div class="lbl">{% trans "Active committees" %}</div><div class="val">{{ tile.committees }}</div></a></div>
+  <div class="col"><a class="kpi info" href="{% url 'committees:meetings' %}"><div class="lbl">{% trans "Meetings held / scheduled" %}</div><div class="val">{{ tile.meetings_held }} <small>/ {{ tile.meetings_scheduled }}</small></div></a></div>
+  <div class="col"><a class="kpi {% if tile.mom_submission_rate != None and tile.mom_submission_rate < 70 %}warn{% else %}good{% endif %}" href="{% url 'committees:moms' %}"><div class="lbl">{% trans "MOM submission / approval rate" %}</div><div class="val">{{ tile.mom_submission_rate|pct }} <small>/ {{ tile.mom_approval_rate|pct }}</small></div></a></div>
+  <div class="col"><a class="kpi" href="{% url 'governance:decisions' %}"><div class="lbl">{% trans "Decisions issued" %}</div><div class="val">{{ tile.decisions_total }}</div></a></div>
+  <div class="col"><a class="kpi warn" href="{% url 'governance:decisions' %}?open=1"><div class="lbl">{% trans "Decisions awaiting implementation" %}</div><div class="val">{{ tile.decisions_open }}</div></a></div>
+  <div class="col"><a class="kpi good" href="{% url 'governance:decisions' %}?status=implemented"><div class="lbl">{% trans "Decisions implemented and verified" %}</div><div class="val">{{ tile.decisions_implemented }}</div></a></div>
+  <div class="col"><a class="kpi info" href="{% url 'governance:tasks' %}?scope=all&status=open"><div class="lbl">{% trans "Tasks completed / ongoing" %}</div><div class="val">{{ tile.tasks_done }} <small>/ {{ tile.tasks_ongoing }}</small></div></a></div>
+  <div class="col"><a class="kpi {% if tile.tasks_overdue %}crit{% else %}good{% endif %}" href="{% url 'governance:tasks' %}?scope=all&status=overdue"><div class="lbl">{% trans "Overdue tasks" %}</div><div class="val">{{ tile.tasks_overdue }}</div></a></div>
+  <div class="col"><a class="kpi {% if tile.urgent_open %}crit{% endif %}" href="{% url 'governance:tasks' %}?scope=all&source=management"><div class="lbl">{% trans "Open urgent management tasks" %}</div><div class="val">{{ tile.urgent_open }}</div></a></div>
+  <div class="col"><a class="kpi {% if tile.intervention %}crit{% else %}good{% endif %}" href="#heat"><div class="lbl">{% trans "Awaiting management approval · committees needing intervention" %}</div><div class="val">{{ tile.awaiting_mgmt }} <small>· {{ tile.intervention }}</small></div></a></div>
+</div>
+
+<div class="row g-3 mb-3">
+  <div class="col-xl-7"><div class="card h-100"><div class="card-header">{% trans "Committee performance comparison" %}<span class="ms-auto small-muted">{% trans "weighted score, click a bar to open the committee" %}</span></div><div class="card-body"><div id="ch-perf" class="chart"></div></div></div></div>
+  <div class="col-xl-5"><div class="card h-100"><div class="card-header">{% trans "Decision implementation" %}</div><div class="card-body"><div id="ch-dec" class="chart"></div></div></div></div>
+  <div class="col-xl-7"><div class="card h-100"><div class="card-header">{% trans "Task completion by committee" %}</div><div class="card-body"><div id="ch-tasks" class="chart"></div></div></div></div>
+  <div class="col-xl-5"><div class="card h-100"><div class="card-header">{% trans "MOM submission compliance" %}<span class="ms-auto small-muted">{% trans "% submitted on time" %}</span></div><div class="card-body"><div id="ch-mom" class="chart"></div></div></div></div>
+  <div class="col-12" id="heat"><div class="card"><div class="card-header">{% trans "Committee performance heatmap" %}<span class="ms-auto small-muted">{% trans "empty cell = nothing due yet" %}</span></div><div class="card-body"><div id="ch-heat" class="chart"></div></div></div></div>
+  <div class="col-xl-6"><div class="card h-100"><div class="card-header">{% trans "Monthly completion trend" %}</div><div class="card-body"><div id="ch-trend" class="chart"></div></div></div></div>
+  <div class="col-xl-6"><div class="card h-100"><div class="card-header">{% trans "Monthly meetings calendar" %}<a class="ms-auto small" href="{% url 'core:calendar' %}">{% trans "Full calendar" %}</a></div><div class="card-body"><div id="cal"></div></div></div></div>
+</div>
+
+<div class="card mb-3"><div class="card-header"><i class="bi bi-alarm text-danger"></i>{% trans "Overdue decisions and tasks" %}<input class="form-control form-control-sm ms-auto" style="max-width:240px" placeholder="{% trans 'Search…' %}" oninput="filterRows(this,'od-table')"></div>
+<div class="table-responsive"><table class="table table-hover align-middle" id="od-table">
+<thead><tr><th onclick="sortTable('od-table',0)">{% trans "Type" %}</th><th onclick="sortTable('od-table',1)">{% trans "ID" %}</th><th>{% trans "Item" %}</th><th onclick="sortTable('od-table',3)">{% trans "Committee" %}</th><th>{% trans "Responsible" %}</th><th onclick="sortTable('od-table',5)">{% trans "Due" %}</th><th onclick="sortTable('od-table',6,true)">{% trans "Days overdue" %} <i class="bi bi-arrow-down-up"></i></th><th>{% trans "Status" %}</th></tr></thead>
+<tbody>{% for kind, o, due, days in overdue_rows %}<tr>
+<td>{% if kind == 'task' %}{% trans "Task" %}{% else %}{% trans "Decision" %}{% endif %}</td>
+<td><a class="code" href="{% if kind == 'task' %}{% url 'governance:task' o.id %}{% else %}{% url 'governance:decision' o.id %}{% endif %}">{{ o.code }}</a></td>
+<td>{{ o.title|truncatechars:70 }}</td><td class="small">{% if o.committee %}{{ o.committee.name }}{% else %}{% trans "Management" %}{% endif %}</td>
+<td class="small">{% if kind == 'task' %}{% for u in o.active_assignees %}{{ u.display_name }}{% if not forloop.last %}، {% endif %}{% endfor %}{% else %}{{ o.responsible.display_name|default:"—" }}{% endif %}</td>
+<td class="small">{{ due|date:"Y-m-d" }}</td><td class="fw-bold text-danger">{{ days }}</td>
+<td>{% if kind == 'task' %}{% task_badge o %}{% else %}{% decision_badge o %}{% endif %}</td></tr>
+{% empty %}<tr><td colspan="8" class="empty">{% trans "Nothing is overdue." %}</td></tr>{% endfor %}</tbody></table></div></div>
+
+<div class="card"><div class="card-header">{% trans "Committee scorecards" %}<a class="ms-auto small" href="{% url 'reports:index' %}#formulas">{% trans "How scores are calculated" %}</a></div>
+<div class="table-responsive"><table class="table table-hover align-middle">
+<thead><tr><th>{% trans "Committee" %}</th>{% for d in kpi_defs %}<th class="text-center">{% if LANGUAGE_CODE == 'en' %}{{ d.1 }}{% else %}{{ d.2 }}{% endif %}</th>{% endfor %}<th class="text-center">{% trans "Overdue" %}</th><th class="text-center">{% trans "Score" %}</th><th>{% trans "Status" %}</th></tr></thead>
+<tbody>{% for k in kpis %}<tr><td><a href="{% url 'committees:detail' k.committee.id %}">{{ k.committee.name }}</a></td>
+{% for d in kpi_defs %}{% with r=k.rates|get:d.0 %}<td class="text-center small">{{ r.pct|pct }}<div class="small-muted">{{ r.num }}/{{ r.den }}</div></td>{% endwith %}{% endfor %}
+<td class="text-center {% if k.overdue_tasks or k.overdue_decisions %}text-danger fw-bold{% endif %}">{{ k.overdue_tasks|add:k.overdue_decisions }}</td>
+<td class="text-center fw-bold">{{ k.score|pct }}</td><td>{% badge "health" k.health %}</td></tr>{% endfor %}</tbody></table></div></div>
+{% endblock %}
+
+{% block scripts %}
+{{ charts|json_script:"charts-data" }}
+<script src="{% static 'vendor/plotly/plotly.min.js' %}"></script>
+<script src="{% static 'vendor/fullcalendar/index.global.min.js' %}"></script>
+<script src="{% static 'vendor/fullcalendar/ar.global.min.js' %}"></script>
+<script src="{% static 'js/charts.js' %}"></script>
+<script>
+const L = {
+  verified: "{% trans 'Verified' %}", submitted: "{% trans 'Awaiting verification' %}", in_progress: "{% trans 'In progress' %}",
+  not_started: "{% trans 'Not started' %}", blocked: "{% trans 'Blocked' %}", returned: "{% trans 'Returned' %}", overdue: "{% trans 'Overdue' %}",
+  implemented: "{% trans 'Implemented' %}", assigned: "{% trans 'Assigned' %}", registered: "{% trans 'No tasks yet' %}",
+  due: "{% trans 'Tasks due' %}", done: "{% trans 'Tasks verified' %}", score: "{% trans 'Score' %}", pct: "{% trans '% on time' %}"
+};
+drawOverview(JSON.parse(document.getElementById('charts-data').textContent), L);
+drawCalendar('cal', "{% url 'core:calendar_events' %}", {height: 420});
+</script>
+{% endblock %}

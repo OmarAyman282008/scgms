@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{% trans "My profile" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "My profile" %}</h1><div class="sub">{{ user.username }} · {{ user.get_global_role_display }}</div></div></div>
+<div class="row g-3">
+<div class="col-lg-6"><div class="card"><div class="card-header">{% trans "Details and notification preferences" %}</div><div class="card-body">
+<form method="post">{% csrf_token %}{% include "partials/form_fields.html" %}<button class="btn btn-primary">{% trans "Save" %}</button></form>
+</div></div></div>
+<div class="col-lg-6"><div class="card"><div class="card-header">{% trans "My committee roles" %}</div>
+<ul class="list-group list-group-flush">{% for r in roles %}<li class="list-group-item d-flex"><a href="{% url 'committees:detail' r.committee.id %}">{{ r.committee.name }}</a><span class="ms-auto badge text-bg-light">{{ r.role|role_label }}</span></li>{% empty %}<li class="list-group-item muted">{% trans "No committee membership." %}</li>{% endfor %}</ul>
+</div></div></div>
+{% endblock %}

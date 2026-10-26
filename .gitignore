@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+.env
+data/
+staticfiles/
+*.sqlite3
+celerybeat-schedule*
+.DS_Store

@@ -1,0 +1,11 @@
+{% load i18n scgms %}
+<div class="table-responsive"><table class="table table-hover align-middle">
+<thead><tr><th>{% trans "Decision ID" %}</th><th>{% trans "Decision" %}</th><th>{% trans "Committee" %}</th><th>{% trans "Responsible" %}</th><th>{% trans "Target date" %}</th><th>{% trans "Implementation" %}</th><th>{% trans "Status" %}</th></tr></thead>
+<tbody>{% for d in decisions %}<tr>
+<td><a class="code" href="{% url 'governance:decision' d.id %}">{{ d.code }}</a>{% if d.is_demo %} <span class="demo-tag">DEMO</span>{% endif %}</td>
+<td><a class="text-body" href="{% url 'governance:decision' d.id %}">{{ d.title|truncatechars:80 }}</a>{% if d.cancel_requested %} <span class="badge text-bg-warning">{% trans "Cancellation requested" %}</span>{% endif %}</td>
+<td class="small">{{ d.committee.name }}</td><td class="small">{{ d.responsible.display_name|default:"—" }}</td>
+<td class="small {% if d.is_overdue %}text-danger fw-bold{% endif %}">{{ d.target_date|date:"Y-m-d"|default:"—" }}</td>
+<td style="min-width:110px">{% with p=d.progress %}<div class="progress"><div class="progress-bar {% if p == 100 %}bg-success{% endif %}" style="width:{{ p }}%"></div></div><span class="small-muted">{{ p }}%</span>{% endwith %}</td>
+<td>{% decision_badge d %}</td></tr>
+{% empty %}<tr><td colspan="7" class="empty">{% trans "No decisions." %}</td></tr>{% endfor %}</tbody></table></div>

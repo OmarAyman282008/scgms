@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load i18n static %}
+{% block title %}{% trans "Meetings calendar" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "School-wide meetings calendar" %}</h1>
+<div class="sub">{% trans "Colours: navy = scheduled · blue = minutes under review · green = minutes approved · amber = returned for revision · red = minutes overdue · grey = cancelled" %}</div></div>
+<a class="btn btn-outline-primary" href="{% url 'committees:meetings' %}"><i class="bi bi-list"></i> {% trans "List view" %}</a></div>
+<form class="filters d-flex gap-2" method="get"><select class="form-select form-select-sm" style="max-width:320px" name="committee" onchange="this.form.submit()"><option value="">{% trans "All committees" %}</option>{% for c in f.all_committees %}<option value="{{ c.id }}" {% if f.committee.id == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></form>
+<div class="card"><div class="card-body"><div id="cal"></div></div></div>
+{% endblock %}
+{% block scripts %}
+<script src="{% static 'vendor/fullcalendar/index.global.min.js' %}"></script>
+<script src="{% static 'vendor/fullcalendar/ar.global.min.js' %}"></script>
+<script src="{% static 'js/charts.js' %}"></script>
+<script>drawCalendar('cal', "{% url 'core:calendar_events' %}{% if f.committee %}?committee={{ f.committee.id }}{% endif %}");</script>
+{% endblock %}

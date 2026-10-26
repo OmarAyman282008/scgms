@@ -1,0 +1,52 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{% trans "Digital Filing Archive" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Digital Filing Archive" %}</h1><div class="sub">{% trans "Every document is linked to its committee, meeting, decision or task — not stored as a loose file." %}</div></div>
+{% if c %}<a class="btn btn-outline-secondary" href="{% url 'documents:export' c.id %}?year={{ year.id }}"><i class="bi bi-file-zip"></i> {% trans "Export committee records" %}</a>{% endif %}</div>
+<form class="filters row g-2" method="get">
+<div class="col-md-2"><select class="form-select form-select-sm" name="year">{% for y in years %}<option value="{{ y.id }}" {% if year.id == y.id %}selected{% endif %}>{{ y.name }}</option>{% endfor %}</select></div>
+<div class="col-md-3"><select class="form-select form-select-sm" name="committee"><option value="">{% trans "All committees" %}</option>{% for x in committees %}<option value="{{ x.id }}" {% if g.committee == x.id|stringformat:'s' %}selected{% endif %}>{{ x.name }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><input class="form-control form-control-sm" name="q" value="{{ g.q }}" placeholder="{% trans 'Search title or file name' %}"></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="category"><option value="">{% trans "Any document type" %}</option>{% for v, l in categories %}<option value="{{ v }}" {% if g.category == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-1"><input class="form-control form-control-sm" name="decision" value="{{ g.decision }}" placeholder="{% trans 'Decision ID' %}"></div>
+<div class="col-md-1"><input type="date" class="form-control form-control-sm" name="from" value="{{ g.from }}" title="{% trans 'From' %}"></div>
+<div class="col-md-1"><button class="btn btn-sm btn-primary w-100">{% trans "Go" %}</button></div></form>
+
+{% if searching %}
+<div class="card"><div class="card-header">{% trans "Search results" %}<span class="ms-auto small-muted">{{ page.paginator.count }}</span></div>{% with documents=page %}{% include "partials/document_table.html" %}{% endwith %}</div>{% include "partials/pager.html" %}
+
+{% elif c %}
+<div class="card"><div class="card-header"><i class="bi bi-folder2-open text-warning"></i> {{ year.name }} / {{ c.name }}</div><div class="card-body">
+<details class="folder" open><summary><i class="bi bi-folder-fill text-warning"></i> {% trans "Committee Formation & Membership" %}</summary><div class="inner">
+  <ul class="small mb-2">{% for m in memberships %}<li>{{ m.user.display_name }} — {{ m.role|role_label }} ({{ m.start_date }}{% if m.end_date %} → {{ m.end_date }}{% endif %})</li>{% endfor %}</ul>
+  {% with documents=by_cat.formation %}{% if documents %}{% include "partials/document_table.html" %}{% endif %}{% endwith %}</div></details>
+<details class="folder"><summary><i class="bi bi-folder-fill text-warning"></i> {% trans "Annual Action Plan" %} <span class="badge text-bg-light">{{ by_cat.action_plan|length }}</span></summary><div class="inner">{% with documents=by_cat.action_plan %}{% include "partials/document_table.html" %}{% endwith %}<a class="small" href="{% url 'committees:detail' c.id %}?tab=plan">{% trans "Open the action plan" %}</a></div></details>
+<details class="folder" open><summary><i class="bi bi-folder-fill text-warning"></i> {% trans "Monthly Meetings" %} <span class="badge text-bg-light">{{ mrows|length }}</span></summary><div class="inner">
+{% for r in mrows %}<details class="folder"><summary><i class="bi bi-folder text-warning"></i> {% trans "Meeting" %} {{ r.m.number|stringformat:"02d" }} · {{ r.m.date }} {% badge "mom" r.m.mom.status %}</summary><div class="inner small">
+  <div class="mb-1"><i class="bi bi-folder2"></i> <b>{% trans "Agenda" %}</b>: {% for a in r.m.agenda_items.all %}{{ a.title }}{% if not forloop.last %} · {% endif %}{% empty %}—{% endfor %}</div>
+  <div class="mb-1"><i class="bi bi-folder2"></i> <b>{% trans "Approved MOM" %}</b>: {% for d in r.mom %}<a href="{% url 'documents:detail' d.id %}">{{ d.title }}</a> (v{{ d.current.version_no }}){% empty %}—{% endfor %}</div>
+  <div class="mb-1"><i class="bi bi-folder2"></i> <b>{% trans "Registered Decisions" %}</b>: {% for d in r.decisions %}<a class="code" href="{% url 'governance:decision' d.id %}">{{ d.code }}</a> {% empty %}—{% endfor %}</div>
+  <div class="mb-1"><i class="bi bi-folder2"></i> <b>{% trans "Action Items" %}</b>: {% for t in r.tasks %}<a class="code" href="{% url 'governance:task' t.id %}">{{ t.code }}</a> {% empty %}—{% endfor %}</div>
+  <div class="mb-1"><i class="bi bi-folder2"></i> <b>{% trans "Implementation Evidence" %}</b>: {% for d in r.evidence %}<a href="{% url 'documents:detail' d.id %}">{{ d.title|truncatechars:40 }}</a>{% if not forloop.last %} · {% endif %}{% empty %}—{% endfor %}</div>
+  <a href="{% url 'committees:meeting' r.m.id %}">{% trans "Open meeting" %}</a></div></details>
+{% empty %}<div class="muted small">{% trans "No meetings this year." %}</div>{% endfor %}</div></details>
+<details class="folder"><summary><i class="bi bi-folder-fill text-warning"></i> {% trans "Periodic Reports" %} <span class="badge text-bg-light">{{ by_cat.report|length }}</span></summary><div class="inner">{% with documents=by_cat.report %}{% include "partials/document_table.html" %}{% endwith %}</div></details>
+<details class="folder"><summary><i class="bi bi-folder-fill text-warning"></i> {% trans "Approved Decisions" %} <span class="badge text-bg-light">{{ implemented|length }}</span></summary><div class="inner">{% with decisions=implemented %}{% include "partials/decision_table.html" %}{% endwith %}</div></details>
+<details class="folder"><summary><i class="bi bi-folder-fill text-warning"></i> {% trans "Correspondence" %} <span class="badge text-bg-light">{{ by_cat.correspondence|length }}</span></summary><div class="inner">{% with documents=by_cat.correspondence %}{% include "partials/document_table.html" %}{% endwith %}</div></details>
+<details class="folder"><summary><i class="bi bi-folder-fill text-warning"></i> {% trans "Annual Performance Report" %} <span class="badge text-bg-light">{{ by_cat.annual_report|length }}</span></summary><div class="inner">{% with documents=by_cat.annual_report %}{% include "partials/document_table.html" %}{% endwith %}</div></details>
+{% if by_cat.other or by_cat.decision %}<details class="folder"><summary><i class="bi bi-folder-fill text-warning"></i> {% trans "Other" %}</summary><div class="inner">{% with documents=by_cat.other %}{% include "partials/document_table.html" %}{% endwith %}</div></details>{% endif %}
+</div></div>
+{% if can_upload %}<div class="card mt-3"><div class="card-header"><i class="bi bi-upload"></i>{% trans "File a document" %}</div><div class="card-body">
+<form method="post" action="{% url 'documents:upload' %}" enctype="multipart/form-data" class="row g-2">{% csrf_token %}<input type="hidden" name="committee" value="{{ c.id }}"><input type="hidden" name="next" value="{{ request.get_full_path }}">
+<div class="col-md-3"><select class="form-select form-select-sm" name="category">{% for v, l in categories %}{% if v != 'mom' and v != 'evidence' %}<option value="{{ v }}">{{ l }}</option>{% endif %}{% endfor %}</select></div>
+<div class="col-md-3"><input class="form-control form-control-sm" name="title" placeholder="{% trans 'Title' %}" required></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="meeting"><option value="">{% trans "No meeting" %}</option>{% for r in mrows %}<option value="{{ r.m.id }}">{% trans "Meeting" %} {{ r.m.number }}</option>{% endfor %}</select></div>
+<div class="col-md-3"><input type="file" class="form-control form-control-sm" name="file" required></div>
+<div class="col-md-1"><button class="btn btn-sm btn-primary w-100">{% trans "Upload" %}</button></div>
+{% if is_exec %}<div class="col-12 form-check ms-2"><input class="form-check-input" type="checkbox" name="is_confidential" id="cf"><label class="form-check-label small" for="cf">{% trans "Confidential (management only)" %}</label></div>{% endif %}</form>
+<div class="form-text">{% trans "Minutes are uploaded from their meeting page and evidence from its task, so they stay linked to the workflow." %}</div></div></div>{% endif %}
+
+{% else %}
+<div class="row g-3 row-cols-1 row-cols-md-3">{% for x, n in counts %}<div class="col"><a class="kpi" href="?committee={{ x.id }}&year={{ year.id }}"><div class="lbl"><i class="bi bi-folder-fill text-warning"></i> {{ x.name }}</div><div class="hint">{% trans "Documents" %}: {{ n }} · {{ year.name }}</div></a></div>{% endfor %}</div>
+{% endif %}
+{% endblock %}

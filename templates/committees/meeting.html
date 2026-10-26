@@ -1,0 +1,164 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{{ c.name }} · {{ m.date }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <div class="small-muted"><a href="{% url 'committees:detail' c.id %}">{{ c.name }}</a> / {% trans "Meetings" %}</div>
+    <h1>{% trans "Meeting" %} {{ m.number }}/{{ m.academic_year.name }} · {{ m.date|date:"l Y-m-d" }}{% if m.is_demo %} <span class="demo-tag">DEMO</span>{% endif %}</h1>
+    <div class="sub">{{ m.get_kind_display }}{% if m.start_time %} · {{ m.start_time|time:"H:i" }}{% endif %}{% if m.venue %} · {{ m.venue }}{% endif %}{% if m.cancel_reason %} · {% trans "Cancelled" %}: {{ m.cancel_reason }}{% endif %}</div>
+  </div>
+  {% badge "meeting" m.status %} {% badge "mom" mom.status %}
+  {% if can_meet and m.status != 'cancelled' %}
+    <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="modal" data-bs-target="#editModal"><i class="bi bi-pencil"></i> {% trans "Edit" %}</button>
+    <form method="post" action="{% url 'committees:meeting_action' m.id %}" class="m-0">{% csrf_token %}<button class="btn btn-outline-secondary btn-sm" name="action" value="invite"><i class="bi bi-envelope"></i> {% if m.invitation_sent_at %}{% trans "Resend invitations" %}{% else %}{% trans "Send invitations" %}{% endif %}</button></form>
+    {% if mom.status == 'draft' %}<button class="btn btn-outline-danger btn-sm" data-bs-toggle="modal" data-bs-target="#cancelModal">{% trans "Cancel meeting" %}</button>{% endif %}
+  {% endif %}
+</div>
+
+<div class="workflow mb-3">
+  {% with s=mom.status %}
+  <span class="step {% if m.status == 'held' %}done{% elif m.status == 'scheduled' %}now{% endif %}">{% trans "Meeting" %}</span><i class="bi bi-arrow-right arrow"></i>
+  <span class="step {% if s in 'submitted under_review approved archived' %}done{% elif s == 'draft' and m.status == 'held' or s == 'revision' %}now{% endif %}">{% trans "MOM submission" %}</span><i class="bi bi-arrow-right arrow"></i>
+  <span class="step {% if s == 'approved' or s == 'archived' %}done{% elif s == 'submitted' or s == 'under_review' %}now{% endif %}">{% trans "MOM approval" %}</span><i class="bi bi-arrow-right arrow"></i>
+  <span class="step {% if decisions %}done{% elif s == 'approved' %}now{% endif %}">{% trans "Decision registration" %}</span><i class="bi bi-arrow-right arrow"></i>
+  <span class="step">{% trans "Task assignment" %}</span><i class="bi bi-arrow-right arrow"></i>
+  <span class="step">{% trans "Progress & evidence" %}</span><i class="bi bi-arrow-right arrow"></i>
+  <span class="step">{% trans "Verification" %}</span><i class="bi bi-arrow-right arrow"></i>
+  <span class="step {% if s == 'archived' %}done{% endif %}">{% trans "Closure & archive" %}</span>
+  {% endwith %}
+</div>
+
+<ul class="nav nav-tabs mb-3" id="mtabs" role="tablist">
+  <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#agenda" type="button">{% trans "Details & agenda" %}</button></li>
+  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#attendance" type="button">{% trans "Attendance" %}</button></li>
+  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#mom" type="button">{% trans "Minutes (MOM)" %}</button></li>
+  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#decisions" type="button">{% trans "Decisions & Action Items" %} <span class="badge text-bg-light">{{ decisions|length }}</span></button></li>
+  <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#comments" type="button">{% trans "Comments" %} <span class="badge text-bg-light">{{ comments|length }}</span></button></li>
+</ul>
+
+<div class="tab-content">
+<!-- agenda -->
+<div class="tab-pane fade show active" id="agenda">
+<div class="row g-3"><div class="col-lg-7"><div class="card"><div class="card-header">{% trans "Agenda" %}</div>
+<ol class="list-group list-group-flush list-group-numbered">{% for a in m.agenda_items.all %}<li class="list-group-item d-flex">{{ a.title }}{% if a.follow_up_decision %} <a class="ms-1 code" href="{% url 'governance:decision' a.follow_up_decision.id %}">{{ a.follow_up_decision.code }}</a>{% endif %}
+{% if can_meet %}<form method="post" action="{% url 'committees:meeting_action' m.id %}" class="ms-auto">{% csrf_token %}<input type="hidden" name="item" value="{{ a.id }}"><button class="btn btn-link btn-sm text-danger p-0" name="action" value="agenda_del"><i class="bi bi-x"></i></button></form>{% endif %}</li>
+{% empty %}<li class="list-group-item muted">{% trans "No agenda items yet." %}</li>{% endfor %}</ol>
+{% if can_meet %}<div class="card-body border-top"><form method="post" action="{% url 'committees:meeting_action' m.id %}" class="d-flex gap-2">{% csrf_token %}<input class="form-control form-control-sm" name="title" placeholder="{% trans 'Add an agenda item' %}"><button class="btn btn-sm btn-outline-primary" name="action" value="agenda_add">{% trans "Add" %}</button></form></div>{% endif %}
+</div></div>
+<div class="col-lg-5"><div class="card"><div class="card-header"><i class="bi bi-arrow-repeat"></i>{% trans "Pending decisions from previous meetings" %}</div>
+<ul class="list-group list-group-flush">{% for d in prev_pending %}<li class="list-group-item"><div class="d-flex gap-2"><a class="code" href="{% url 'governance:decision' d.id %}">{{ d.code }}</a><span class="flex-grow-1 small">{{ d.title|truncatechars:70 }}</span>{% decision_badge d %}</div>
+<div class="small-muted">{{ d.responsible.display_name|default:"—" }} · {{ d.target_date|default:"" }}</div>
+{% if can_meet and m.status == 'scheduled' %}<form method="post" action="{% url 'committees:meeting_action' m.id %}">{% csrf_token %}<input type="hidden" name="decision" value="{{ d.id }}"><button class="btn btn-link btn-sm p-0" name="action" value="agenda_add">+ {% trans "review at this meeting" %}</button></form>{% endif %}</li>
+{% empty %}<li class="list-group-item muted">{% trans "No open decisions from earlier meetings." %}</li>{% endfor %}</ul></div></div></div>
+</div>
+
+<!-- attendance -->
+<div class="tab-pane fade" id="attendance">
+<div class="card"><form method="post" action="{% url 'committees:meeting_action' m.id %}">{% csrf_token %}<input type="hidden" name="action" value="attendance">
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>{% trans "Member" %}</th><th>{% trans "Role" %}</th><th>{% trans "Attendance" %}</th></tr></thead><tbody>
+{% for mb in members %}<tr><td><span class="avatar me-1">{{ mb.user|initials }}</span> {{ mb.user.display_name }}</td><td class="small">{{ mb.role|role_label }}</td>
+<td>{% if can_meet %}<div class="btn-group btn-group-sm" role="group">
+<input type="radio" class="btn-check" name="att_{{ mb.user_id }}" id="p{{ mb.id }}" value="present" {% if not mb.att or mb.att.status == 'present' %}checked{% endif %}><label class="btn btn-outline-success" for="p{{ mb.id }}">{% trans "Present" %}</label>
+<input type="radio" class="btn-check" name="att_{{ mb.user_id }}" id="e{{ mb.id }}" value="excused" {% if mb.att.status == 'excused' %}checked{% endif %}><label class="btn btn-outline-warning" for="e{{ mb.id }}">{% trans "Excused" %}</label>
+<input type="radio" class="btn-check" name="att_{{ mb.user_id }}" id="a{{ mb.id }}" value="absent" {% if mb.att.status == 'absent' %}checked{% endif %}><label class="btn btn-outline-danger" for="a{{ mb.id }}">{% trans "Absent" %}</label>
+</div>{% else %}{{ mb.att.get_status_display|default:"—" }}{% endif %}</td></tr>{% endfor %}
+</tbody></table></div>
+{% if can_meet and m.status != 'cancelled' %}<div class="card-body border-top"><button class="btn btn-primary btn-sm">{% trans "Save attendance" %}</button> <span class="small-muted">{% trans "Saving attendance after the meeting date marks the meeting as held." %}</span></div>{% endif %}
+</form></div>
+</div>
+
+<!-- MOM -->
+<div class="tab-pane fade" id="mom">
+<div class="row g-3">
+<div class="col-lg-7">
+  <div class="card mb-3"><div class="card-header"><span class="badge text-bg-primary rounded-pill">1</span> {% trans "Download the approved template" %}</div><div class="card-body">
+    <p class="small mb-2">{% trans "The template comes pre-filled with the committee name, meeting number, date, time, venue, members, agenda and the decisions still open from earlier meetings." %}</p>
+    <a class="btn btn-primary" href="{% url 'committees:mom_template' m.id %}"><i class="bi bi-file-earmark-word"></i> Download Approved MOM Template | تحميل نموذج محضر الاجتماع</a></div></div>
+  <div class="card mb-3"><div class="card-header"><span class="badge text-bg-primary rounded-pill">2</span> {% trans "Prepare the minutes" %}</div><div class="card-body small">
+    {% trans "Complete attendance and absentees, the discussion summary, each decision or recommendation with its responsible person, deadline and required evidence, then collect the signatures." %}</div></div>
+  <div class="card mb-3"><div class="card-header"><span class="badge text-bg-primary rounded-pill">3</span> {% trans "Upload the completed minutes" %}</div><div class="card-body">
+  {% if can_meet and m.status != 'cancelled' and mom.status in 'draft revision submitted' %}
+    {% if m.date > today %}<div class="small-muted">{% trans "Minutes can be uploaded after the meeting date." %}</div>{% else %}
+    <form method="post" action="{% url 'committees:meeting_action' m.id %}" enctype="multipart/form-data">{% csrf_token %}<input type="hidden" name="action" value="mom_upload">
+      <div class="mb-2"><input type="file" class="form-control" name="file" accept=".pdf,.docx,.doc" required><div class="form-text">{% trans "DOCX or PDF, signed copy preferred." %} {% blocktrans %}Due within {{ grace }} days of the meeting.{% endblocktrans %}</div></div>
+      <div class="mb-2"><textarea class="form-control" name="summary" rows="3" placeholder="{% trans 'Short discussion summary (optional, searchable)' %}">{{ mom.discussion_summary }}</textarea></div>
+      <button class="btn btn-success"><i class="bi bi-upload"></i> Upload Completed MOM | رفع محضر الاجتماع</button></form>{% endif %}
+  {% elif mom.document %}<div class="small">{% trans "The minutes are under review or approved; uploads are closed." %}</div>
+  {% else %}<div class="small-muted">{% trans "Only the committee chair or secretary can upload the minutes." %}</div>{% endif %}
+  </div></div>
+</div>
+<div class="col-lg-5">
+  <div class="card mb-3"><div class="card-header"><span class="badge text-bg-primary rounded-pill">4</span> {% trans "Approval" %}</div><div class="card-body">
+    <div class="workflow mb-3">
+      <span class="step {% if mom.status == 'draft' %}now{% else %}done{% endif %}">{% trans "Draft" %}</span><i class="bi bi-arrow-right arrow"></i>
+      <span class="step {% if mom.status == 'submitted' %}now{% elif mom.status in 'under_review approved archived' %}done{% endif %}">{% trans "Submitted" %}</span><i class="bi bi-arrow-right arrow"></i>
+      <span class="step {% if mom.status == 'under_review' %}now{% elif mom.status in 'approved archived' %}done{% endif %}">{% trans "Under review" %}</span><i class="bi bi-arrow-right arrow"></i>
+      {% if mom.status == 'revision' %}<span class="step now bg-warning border-warning text-dark">{% trans "Revision required" %}</span>{% else %}<span class="step {% if mom.status == 'approved' %}now{% elif mom.status == 'archived' %}done{% endif %}">{% trans "Approved" %}</span>{% endif %}<i class="bi bi-arrow-right arrow"></i>
+      <span class="step {% if mom.status == 'archived' %}now{% endif %}">{% trans "Archived" %}</span></div>
+    {% if mom.document %}{% with v=mom.document.current %}<div class="d-flex gap-2 align-items-center mb-2"><i class="bi bi-file-earmark-text fs-4"></i><div class="flex-grow-1"><a href="{% url 'documents:detail' mom.document.id %}">{{ v.original_name }}</a><div class="small-muted">v{{ v.version_no }} · {{ v.uploaded_at|date:"Y-m-d H:i" }} · {{ v.uploaded_by.display_name }}</div></div>
+      <a class="btn btn-sm btn-outline-secondary" href="{% url 'documents:download' v.id %}"><i class="bi bi-download"></i></a>{% if v.extension == 'pdf' %}<a class="btn btn-sm btn-outline-secondary" target="_blank" href="{% url 'documents:download' v.id %}?inline=1"><i class="bi bi-eye"></i></a>{% endif %}</div>{% endwith %}{% endif %}
+    {% if mom.discussion_summary %}<div class="small bg-light rounded p-2 mb-2" style="white-space:pre-line">{{ mom.discussion_summary }}</div>{% endif %}
+    {% if can_chair_review or can_mgmt_review %}
+    <form method="post" action="{% url 'committees:meeting_action' m.id %}" class="border rounded p-2 bg-light">{% csrf_token %}
+      <div class="small fw-semibold mb-1">{% if can_chair_review %}{% trans "Chair review" %}{% else %}{% trans "Management approval" %}{% endif %}</div>
+      <textarea class="form-control form-control-sm mb-2" name="comment" rows="2" placeholder="{% trans 'Comment (required when returning)' %}"></textarea>
+      <button class="btn btn-sm btn-success" name="action" value="mom_approve"><i class="bi bi-check2"></i> {% trans "Approve" %}</button>
+      <button class="btn btn-sm btn-outline-danger" name="action" value="mom_return"><i class="bi bi-arrow-return-left"></i> {% trans "Return for revision" %}</button></form>{% endif %}
+    {% if is_exec and mom.status in 'approved archived' %}<details class="mt-2"><summary class="small">{% trans "Reopen approved minutes" %}</summary><form method="post" action="{% url 'committees:meeting_action' m.id %}" class="d-flex gap-2 mt-1">{% csrf_token %}<input class="form-control form-control-sm" name="reason" placeholder="{% trans 'Reason (logged)' %}" required><button class="btn btn-sm btn-outline-danger" name="action" value="mom_reopen">{% trans "Reopen" %}</button></form></details>{% endif %}
+  </div></div>
+  <div class="card"><div class="card-header">{% trans "Approval history" %}</div><div class="card-body"><ul class="timeline">
+  {% for r in reviews %}<li><div>{{ r.get_action_display }}{% if r.comment %}: <span class="text-body">{{ r.comment }}</span>{% endif %}</div><div class="meta">{{ r.actor.display_name }} · {{ r.created_at|date:"Y-m-d H:i" }}</div></li>{% empty %}<li class="muted">{% trans "Nothing yet." %}</li>{% endfor %}</ul>
+  {% if versions|length > 1 %}<div class="small fw-semibold mt-2">{% trans "Earlier versions" %}</div>{% for v in versions %}{% if not forloop.first %}<div class="small"><a href="{% url 'documents:download' v.id %}">v{{ v.version_no }} · {{ v.original_name }}</a> <span class="muted">{{ v.uploaded_at|date:"Y-m-d" }}</span></div>{% endif %}{% endfor %}{% endif %}</div></div>
+</div></div>
+</div>
+
+<!-- decisions -->
+<div class="tab-pane fade" id="decisions">
+{% if not mom.is_approved %}<div class="alert alert-info"><i class="bi bi-info-circle"></i> {% trans "Decisions are registered once the minutes are approved. Approved decisions then become tasks with an owner, a deadline and evidence." %}</div>{% endif %}
+{% if can_register %}
+<div class="card mb-3"><div class="card-header"><i class="bi bi-plus-circle"></i>{% trans "Register a decision from the approved minutes" %}<a class="ms-auto small" href="{% url 'governance:decision_new' m.id %}">{% trans "Full form" %}</a></div><div class="card-body">
+<form method="post" action="{% url 'governance:decision_new' m.id %}" class="row g-2">{% csrf_token %}
+  <div class="col-md-6"><input class="form-control form-control-sm" name="title" placeholder="{% trans 'Decision title' %}" required></div>
+  <div class="col-md-3"><select class="form-select form-select-sm" name="category">{% for v, l in categories %}<option value="{{ v }}">{{ l }}</option>{% endfor %}</select></div>
+  <div class="col-md-3"><select class="form-select form-select-sm" name="priority">{% for v, l in priorities %}<option value="{{ v }}" {% if v == 'medium' %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  <div class="col-12"><textarea class="form-control form-control-sm" name="description" rows="2" placeholder="{% trans 'Full decision statement' %}"></textarea></div>
+  <div class="col-md-4"><select class="form-select form-select-sm" name="responsible"><option value="">{% trans "Responsible person" %}</option>{% for u in users %}<option value="{{ u.id }}">{{ u.display_name }}</option>{% endfor %}</select></div>
+  <div class="col-md-3"><input type="date" class="form-control form-control-sm" name="target_date" title="{% trans 'Target date' %}"></div>
+  <div class="col-md-5"><input class="form-control form-control-sm" name="required_evidence" placeholder="{% trans 'Required evidence' %}"></div>
+  <div class="col-md-6 form-check ms-2"><input class="form-check-input" type="checkbox" name="is_actionable" id="act" checked><label class="form-check-label small" for="act">{% trans "Actionable (needs implementation) — untick for acknowledgements and information" %}</label></div>
+  <div class="col-md-5 text-end"><button class="btn btn-sm btn-primary" name="next" value="meeting">{% trans "Register decision" %}</button></div>
+</form></div></div>{% endif %}
+
+<div class="card mb-3"><div class="card-header">{% trans "Decisions registered from this meeting" %}</div>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>{% trans "Decision" %}</th><th>{% trans "Responsible" %}</th><th>{% trans "Target" %}</th><th>{% trans "Tasks" %}</th><th>{% trans "Status" %}</th><th></th></tr></thead><tbody>
+{% for d in decisions %}<tr><td><a class="code" href="{% url 'governance:decision' d.id %}">{{ d.code }}</a> {{ d.title }}<div class="small-muted">{{ d.get_category_display }} · {% badge "priority" d.priority %}</div></td>
+<td class="small">{{ d.responsible.display_name|default:"—" }}</td><td class="small">{{ d.target_date|default:"—" }}</td>
+<td class="small">{% for t in d.tasks.all %}<div><a class="code" href="{% url 'governance:task' t.id %}">{{ t.code }}</a> {% for a in t.assignments.all %}{% if a.active %}{{ a.user.display_name }} {% endif %}{% endfor %} {% task_badge t %}</div>{% empty %}{% if d.is_actionable %}<span class="text-warning">{% trans "No tasks yet" %}</span>{% else %}—{% endif %}{% endfor %}</td>
+<td>{% decision_badge d %}</td>
+<td>{% if d.is_open and can_convert %}<a class="btn btn-sm btn-primary text-nowrap" href="{% url 'governance:decision_convert' d.id %}"><i class="bi bi-diagram-2"></i> {% trans "Create tasks" %}</a>{% endif %}</td></tr>
+{% empty %}<tr><td colspan="6" class="empty">{% trans "No decisions registered yet." %}</td></tr>{% endfor %}</tbody></table></div></div>
+</div>
+
+<!-- comments -->
+<div class="tab-pane fade" id="comments"><div class="card"><div class="card-body">
+<ul class="timeline mb-3">{% for cm in comments %}<li><div>{{ cm.body }}</div><div class="meta">{{ cm.author.display_name }}{% if cm.is_management %} · <span class="badge text-bg-primary">{% trans "Management" %}</span>{% endif %} · {{ cm.created_at|date:"Y-m-d H:i" }}</div></li>{% empty %}<li class="muted">{% trans "No comments yet." %}</li>{% endfor %}</ul>
+<form method="post" action="{% url 'committees:meeting_action' m.id %}" class="d-flex gap-2">{% csrf_token %}<input class="form-control" name="body" placeholder="{% trans 'Write a comment' %}" required><button class="btn btn-primary" name="action" value="comment">{% trans "Post" %}</button></form>
+</div></div></div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1"><div class="modal-dialog"><form class="modal-content" method="post" action="{% url 'committees:meeting_edit' m.id %}">{% csrf_token %}
+<div class="modal-header"><h5 class="modal-title">{% trans "Edit meeting" %}</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+<div class="modal-body"><label class="form-label">{% trans "Date" %}</label><input type="date" class="form-control mb-2" name="date" value="{{ m.date|date:'Y-m-d' }}">
+<label class="form-label">{% trans "Time" %}</label><input type="time" class="form-control mb-2" name="start_time" value="{{ m.start_time|time:'H:i' }}">
+<label class="form-label">{% trans "Venue" %}</label><input class="form-control mb-2" name="venue" value="{{ m.venue }}">
+<label class="form-label">{% trans "Type" %}</label><select class="form-select" name="kind"><option value="regular" {% if m.kind == 'regular' %}selected{% endif %}>{% trans "Regular monthly meeting" %}</option><option value="exceptional" {% if m.kind == 'exceptional' %}selected{% endif %}>{% trans "Exceptional meeting" %}</option><option value="urgent" {% if m.kind == 'urgent' %}selected{% endif %}>{% trans "Urgent meeting" %}</option></select></div>
+<div class="modal-footer"><button class="btn btn-primary">{% trans "Save" %}</button></div></form></div></div>
+<div class="modal fade" id="cancelModal" tabindex="-1"><div class="modal-dialog"><form class="modal-content" method="post" action="{% url 'committees:meeting_action' m.id %}">{% csrf_token %}<input type="hidden" name="action" value="cancel">
+<div class="modal-header"><h5 class="modal-title">{% trans "Cancel meeting" %}</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+<div class="modal-body"><label class="form-label">{% trans "Reason" %}</label><input class="form-control" name="reason" required></div>
+<div class="modal-footer"><button class="btn btn-danger">{% trans "Cancel meeting" %}</button></div></form></div></div>
+{% endblock %}
+{% block scripts %}<script>
+(function(){const h=location.hash;if(h){const b=document.querySelector('[data-bs-target="'+h+'"]');if(b)bootstrap.Tab.getOrCreateInstance(b).show();}
+document.querySelectorAll('#mtabs button').forEach(b=>b.addEventListener('shown.bs.tab',e=>history.replaceState(null,'',e.target.dataset.bsTarget)));})();
+</script>{% endblock %}

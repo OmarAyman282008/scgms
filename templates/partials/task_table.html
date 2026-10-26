@@ -1,0 +1,14 @@
+{% load i18n scgms %}
+<div class="table-responsive"><table class="table table-hover align-middle">
+<thead><tr><th>{% trans "ID" %}</th><th>{% trans "Task" %}</th><th>{% trans "Committee" %}</th><th>{% trans "Responsible" %}</th><th>{% trans "Deadline" %}</th><th style="min-width:110px">{% trans "Progress" %}</th><th>{% trans "Status" %}</th></tr></thead>
+<tbody>{% for t in tasks %}<tr>
+<td><a class="code" href="{% url 'governance:task' t.id %}">{{ t.code }}</a>{% if t.is_demo %} <span class="demo-tag">DEMO</span>{% endif %}</td>
+<td><a href="{% url 'governance:task' t.id %}" class="text-body">{{ t.title|truncatechars:80 }}</a>{% if t.is_urgent %} <span class="badge text-bg-danger">{% trans "Urgent" %}</span>{% endif %}
+  {% if t.decision %}<div class="small-muted">{% trans "From decision" %} {{ t.decision.code }}</div>{% elif t.source == 'management' %}<div class="small-muted">{% trans "Top management assignment" %}</div>{% endif %}
+  {% if t.blocker %}<div class="small text-danger"><i class="bi bi-sign-stop"></i> {{ t.blocker|truncatechars:120 }}</div>{% endif %}</td>
+<td class="small">{% if t.committee %}{{ t.committee.name }}{% else %}{% trans "Management" %}{% endif %}</td>
+<td class="small">{% for a in t.assignments.all %}{% if a.active %}{{ a.user.display_name }}{% if not forloop.last %}، {% endif %}{% endif %}{% endfor %}</td>
+<td class="small {% if t.is_overdue %}text-danger fw-bold{% endif %}">{{ t.due_date|date:"Y-m-d"|default:"—" }}{% if t.is_overdue %}<div>{% blocktrans with n=t.days_overdue %}{{ n }} days late{% endblocktrans %}</div>{% endif %}</td>
+<td><div class="progress"><div class="progress-bar {% if t.status == 'verified' %}bg-success{% endif %}" style="width:{{ t.progress }}%"></div></div><span class="small-muted">{{ t.progress }}%</span></td>
+<td>{% task_badge t %}</td></tr>
+{% empty %}<tr><td colspan="7" class="empty">{% trans "No tasks." %}</td></tr>{% endfor %}</tbody></table></div>

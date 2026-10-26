@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{{ rep.title }}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><div class="small-muted"><a href="{% url 'reports:index' %}">{% trans "Reports & Analytics" %}</a></div><h1>{{ rep.title }}</h1><div class="sub">{{ rep.period }}</div></div>
+<a class="btn btn-outline-danger" href="{% qs format='pdf' %}"><i class="bi bi-filetype-pdf"></i> PDF</a><a class="btn btn-outline-success" href="{% qs format='xlsx' %}"><i class="bi bi-filetype-xlsx"></i> Excel</a>
+<button class="btn btn-outline-secondary" onclick="window.print()"><i class="bi bi-printer"></i></button></div>
+{% if slug == 'monthly-performance' %}<form class="filters d-flex gap-2 align-items-end">{% for k, v in request.GET.items %}{% if k != 'month' %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endif %}{% endfor %}<div><label class="form-label small mb-1">{% trans "Month" %}</label><input type="month" class="form-control form-control-sm" name="month" value="{{ month }}"></div>
+<div><label class="form-label small mb-1">{% trans "Committee" %}</label><select class="form-select form-select-sm" name="committee"><option value="">{% trans "All committees" %}</option>{% for c in f.all_committees %}<option value="{{ c.id }}" {% if f.committee.id == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></div><button class="btn btn-sm btn-primary">{% trans "Apply" %}</button></form>
+{% else %}{% include "partials/filters.html" %}
+{% if slug == 'decision-implementation' %}<form class="d-flex gap-2 mb-3">{% for k, v in request.GET.items %}{% if k != 'status' %}<input type="hidden" name="{{ k }}" value="{{ v }}">{% endif %}{% endfor %}<select class="form-select form-select-sm" style="max-width:260px" name="status" onchange="this.form.submit()"><option value="">{% trans "Any decision status" %}</option>{% for v, l in statuses %}<option value="{{ v }}" {% if request.GET.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></form>{% endif %}{% endif %}
+{% if rep.summary %}<div class="row g-2 mb-3 row-cols-2 row-cols-md-4">{% for k, v in rep.summary %}<div class="col"><div class="kpi"><div class="lbl">{{ k }}</div><div class="val">{{ v }}</div></div></div>{% endfor %}</div>{% endif %}
+<div class="card"><div class="table-responsive"><table class="table table-hover table-sm align-middle"><thead><tr>{% for c in rep.columns %}<th>{{ c }}</th>{% endfor %}</tr></thead><tbody>
+{% for r in rep.rows %}<tr>{% for v in r %}<td class="small">{{ v }}</td>{% endfor %}</tr>{% empty %}<tr><td colspan="{{ rep.columns|length }}" class="empty">{% trans "Nothing to report for this period." %}</td></tr>{% endfor %}</tbody></table></div></div>
+{% if rep.note %}<div class="small-muted mt-2">{{ rep.note }}</div>{% endif %}
+{% endblock %}

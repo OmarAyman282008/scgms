@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Audit log" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Audit log" %}</h1><div class="sub">{% trans "Append-only record of every significant action." %}</div></div></div>
+<form class="filters d-flex flex-wrap gap-2"><select class="form-select form-select-sm" style="max-width:280px" name="committee"><option value="">{% trans "All committees" %}</option>{% for c in committees %}<option value="{{ c.id }}" {% if request.GET.committee == c.id|stringformat:'s' %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select>
+<input class="form-control form-control-sm" style="max-width:260px" name="q" value="{{ request.GET.q }}" placeholder="{% trans 'Search…' %}">
+<label class="small d-flex align-items-center gap-1"><input type="checkbox" name="logins" value="1" {% if request.GET.logins %}checked{% endif %}> {% trans "Include logins" %}</label>
+<button class="btn btn-sm btn-primary">{% trans "Filter" %}</button></form>
+<div class="card"><div class="table-responsive"><table class="table table-sm align-middle"><thead><tr><th>{% trans "When" %}</th><th>{% trans "Who" %}</th><th>{% trans "Committee" %}</th><th>{% trans "Action" %}</th><th>{% trans "Details" %}</th><th>IP</th></tr></thead><tbody>
+{% for a in page %}<tr><td class="small text-nowrap">{{ a.created_at|date:"Y-m-d H:i" }}</td><td class="small">{{ a.actor.display_name|default:"system" }}</td><td class="small">{{ a.committee.name|default:"" }}</td><td><span class="code">{{ a.action }}</span></td><td class="small">{{ a.message }}</td><td class="small-muted">{{ a.ip_address|default:"" }}</td></tr>{% endfor %}
+</tbody></table></div></div>{% include "partials/pager.html" %}
+{% endblock %}

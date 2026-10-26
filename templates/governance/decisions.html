@@ -1,0 +1,15 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{% trans "Decisions & Action Items" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Decisions & Action Items" %}</h1><div class="sub">{% trans "A decision closes only when every one of its tasks has been verified with evidence." %}</div></div></div>
+<form class="filters row g-2" method="get">
+<div class="col-md-3"><input class="form-control form-control-sm" name="q" value="{{ g.q }}" placeholder="{% trans 'Search ID, title or text…' %}"></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="committee"><option value="">{% trans "All committees" %}</option>{% for c in committees %}<option value="{{ c.id }}" {% if g.committee == c.id|stringformat:'s' %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="status"><option value="">{% trans "Any status" %}</option>{% for v, l in statuses %}<option value="{{ v }}" {% if g.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-1"><select class="form-select form-select-sm" name="priority"><option value="">{% trans "Priority" %}</option>{% for v, l in priorities %}<option value="{{ v }}" {% if g.priority == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="person"><option value="">{% trans "Responsible" %}</option>{% for u in users %}<option value="{{ u.id }}" {% if g.person == u.id|stringformat:'s' %}selected{% endif %}>{{ u.display_name }}</option>{% endfor %}</select></div>
+<div class="col-md-1 form-check d-flex align-items-center gap-1 ps-4"><input type="checkbox" class="form-check-input" name="overdue" value="1" id="ov" {% if g.overdue %}checked{% endif %}><label for="ov" class="small">{% trans "Overdue" %}</label></div>
+<div class="col-md-1"><button class="btn btn-sm btn-primary w-100">{% trans "Filter" %}</button></div></form>
+<div class="card">{% with decisions=page %}{% include "partials/decision_table.html" %}{% endwith %}</div>
+{% include "partials/pager.html" %}
+{% endblock %}

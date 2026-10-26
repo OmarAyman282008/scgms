@@ -1,0 +1,20 @@
+{% load i18n %}
+<form class="filters row g-2 align-items-end" method="get">
+  <div class="col-6 col-md-4 col-xl-2"><label class="form-label small mb-1">{% trans "Academic year" %}</label>
+    <select class="form-select form-select-sm" name="year" onchange="this.form.submit()">{% for y in f.years %}<option value="{{ y.id }}" {% if f.year.id == y.id %}selected{% endif %}>{{ y.name }}</option>{% endfor %}</select></div>
+  <div class="col-6 col-md-4 col-xl-2"><label class="form-label small mb-1">{% trans "Semester" %}</label>
+    <select class="form-select form-select-sm" name="semester" onchange="this.form.submit()"><option value="">{% trans "Whole year" %}</option>{% for s in f.semesters %}<option value="{{ s.id }}" {% if f.semester.id == s.id %}selected{% endif %}>{{ s }}</option>{% endfor %}</select></div>
+  <div class="col-12 col-md-4 col-xl-3"><label class="form-label small mb-1">{% trans "Committee" %}</label>
+    <select class="form-select form-select-sm" name="committee"><option value="">{% trans "All committees" %}</option>{% for c in f.all_committees %}<option value="{{ c.id }}" {% if f.committee.id == c.id %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></div>
+  <div class="col-6 col-md-4 col-xl-2"><label class="form-label small mb-1">{% trans "From" %}</label><input type="date" class="form-control form-control-sm" name="from" value="{{ f.start|date:'Y-m-d' }}"></div>
+  <div class="col-6 col-md-4 col-xl-2"><label class="form-label small mb-1">{% trans "To" %}</label><input type="date" class="form-control form-control-sm" name="to" value="{{ f.end|date:'Y-m-d' }}"></div>
+  {% if users %}
+  <div class="col-6 col-md-4 col-xl-3"><label class="form-label small mb-1">{% trans "Priority" %}</label>
+    <select class="form-select form-select-sm" name="priority"><option value="">{% trans "Any" %}</option>{% for v, l in priorities %}<option value="{{ v }}" {% if f.priority == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  <div class="col-6 col-md-4 col-xl-3"><label class="form-label small mb-1">{% trans "Responsible" %}</label>
+    <select class="form-select form-select-sm" name="person"><option value="">{% trans "Anyone" %}</option>{% for u in users %}<option value="{{ u.id }}" {% if f.person == u.id|stringformat:'s' %}selected{% endif %}>{{ u.display_name }}</option>{% endfor %}</select></div>
+  <div class="col-6 col-md-4 col-xl-3"><label class="form-label small mb-1">{% trans "Task status" %}</label>
+    <select class="form-select form-select-sm" name="status"><option value="">{% trans "Any" %}</option>{% for v, l in statuses %}<option value="{{ v }}" {% if f.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+  {% endif %}
+  <div class="col-6 col-md-4 {% if users %}col-xl-3{% else %}col-xl-1{% endif %} d-flex gap-1"><button class="btn btn-sm btn-primary flex-fill">{% trans "Apply" %}</button><a class="btn btn-sm btn-outline-secondary" href="?" title="{% trans 'Reset' %}"><i class="bi bi-x-lg"></i></a></div>
+</form>

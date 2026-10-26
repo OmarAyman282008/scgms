@@ -1,0 +1,19 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{% trans "Committee Meetings" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Committee Meetings" %}</h1><div class="sub">{% trans "Regular, exceptional and urgent meetings across all committees." %}</div></div>
+<a class="btn btn-outline-primary" href="{% url 'core:calendar' %}"><i class="bi bi-calendar3"></i> {% trans "Calendar" %}</a>
+{% if can_create %}<a class="btn btn-primary" href="{% url 'committees:meeting_new' %}"><i class="bi bi-plus-lg"></i> {% trans "Schedule meeting" %}</a>{% endif %}</div>
+<form class="filters row g-2" method="get">
+<div class="col-md-3"><select class="form-select form-select-sm" name="committee"><option value="">{% trans "All committees" %}</option>{% for c in committees %}<option value="{{ c.id }}" {% if g.committee == c.id|stringformat:'s' %}selected{% endif %}>{{ c.name }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="when"><option value="">{% trans "All dates" %}</option><option value="upcoming" {% if g.when == 'upcoming' %}selected{% endif %}>{% trans "Upcoming" %}</option><option value="past" {% if g.when == 'past' %}selected{% endif %}>{% trans "Past" %}</option></select></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="status"><option value="">{% trans "Any meeting status" %}</option>{% for v, l in statuses %}<option value="{{ v }}" {% if g.status == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-3"><select class="form-select form-select-sm" name="mom"><option value="">{% trans "Any minutes status" %}</option>{% for v, l in mom_statuses %}<option value="{{ v }}" {% if g.mom == v %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><button class="btn btn-sm btn-primary w-100">{% trans "Filter" %}</button></div></form>
+<div class="card"><div class="table-responsive"><table class="table table-hover align-middle"><thead><tr><th>{% trans "Date" %}</th><th>{% trans "Committee" %}</th><th>{% trans "No." %}</th><th>{% trans "Type" %}</th><th>{% trans "Meeting" %}</th><th>{% trans "Minutes" %}</th><th></th></tr></thead><tbody>
+{% for m in page %}<tr><td class="text-nowrap"><a href="{% url 'committees:meeting' m.id %}">{{ m.date|date:"D Y-m-d" }}</a>{% if m.start_time %}<div class="small-muted">{{ m.start_time|time:"H:i" }}</div>{% endif %}</td>
+<td>{{ m.committee.name }}{% if m.is_demo %} <span class="demo-tag">DEMO</span>{% endif %}</td><td>{{ m.number }}</td><td class="small">{{ m.get_kind_display }}</td><td>{% badge "meeting" m.status %}</td><td>{% badge "mom" m.mom.status %}</td>
+<td class="text-nowrap"><a class="btn btn-sm btn-outline-secondary" href="{% url 'committees:mom_template' m.id %}" title="{% trans 'Download Approved MOM Template' %}"><i class="bi bi-file-earmark-word"></i></a> <a class="btn btn-sm btn-outline-primary" href="{% url 'committees:meeting' m.id %}">{% trans "Open" %}</a></td></tr>
+{% empty %}<tr><td colspan="7" class="empty">{% trans "No meetings match these filters." %}</td></tr>{% endfor %}</tbody></table></div></div>
+{% include "partials/pager.html" %}
+{% endblock %}

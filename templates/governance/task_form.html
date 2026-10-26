@@ -1,0 +1,12 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% if urgent %}{% trans "Assign Urgent Task" %}{% else %}{% trans "New task" %}{% endif %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% if urgent %}<i class="bi bi-lightning-charge-fill text-danger"></i> {% trans "Assign an urgent management task" %}{% elif plan %}{% trans "Convert plan item to task" %}{% else %}{% trans "New committee task" %}{% endif %}</h1>
+<div class="sub">{% if urgent %}{% trans "Assigned directly by the Dean or Vice-Dean; it follows the same evidence, verification and closure process." %}{% else %}{% trans "Tasks that come from meeting decisions are created from the decision page instead." %}{% endif %}</div></div></div>
+<div class="card" style="max-width:900px"><div class="card-body"><form method="post">{% csrf_token %}{% if urgent %}<input type="hidden" name="urgent" value="1">{% endif %}{% if plan %}<input type="hidden" name="plan" value="{{ plan.id }}">{% endif %}
+<div class="row">{% for field in form %}<div class="{% if field.name in 'title description expected_deliverables' %}col-12{% else %}col-md-6{% endif %} mb-3">
+<label class="form-label">{{ field.label }}{% if field.field.required %} <span class="text-danger">*</span>{% endif %}</label>{{ field }}
+{% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}{% for e in field.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>{% endfor %}</div>
+<button class="btn {% if urgent %}btn-danger{% else %}btn-primary{% endif %}">{% trans "Assign task" %}</button></form></div></div>
+{% endblock %}
+{% block scripts %}<script>document.querySelectorAll('form input:not([type=checkbox]):not([type=hidden]),form select,form textarea').forEach(e=>e.classList.add(e.tagName==='SELECT'?'form-select':'form-control'))</script>{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}{% load i18n %}
+{% block title %}{% trans "Reports & Analytics" %}{% endblock %}
+{% block content %}
+<div class="page-head"><div class="grow"><h1>{% trans "Reports & Analytics" %}</h1><div class="sub">{% trans "Management-ready reports with filters; every report exports to PDF and Excel." %}</div></div></div>
+<div class="row g-3 row-cols-1 row-cols-md-2 row-cols-xl-4">{% for slug, title in items %}<div class="col"><a class="kpi" href="{% url 'reports:report' slug %}"><div class="lbl fw-semibold text-body"><i class="bi bi-file-earmark-bar-graph text-primary"></i> {{ title }}</div><div class="hint mt-2"><i class="bi bi-filetype-pdf"></i> PDF · <i class="bi bi-filetype-xlsx"></i> Excel</div></a></div>{% endfor %}</div>
+<div class="card mt-4" id="formulas"><div class="card-header">{% trans "Performance indicators — documented formulas" %}</div><ul class="list-group list-group-flush">
+{% for d in kpi_defs %}<li class="list-group-item"><b>{% if LANGUAGE_CODE == 'en' %}{{ d.1 }}{% else %}{{ d.2 }}{% endif %}</b> — <span class="small">{% if LANGUAGE_CODE == 'en' %}{{ d.3 }}{% else %}{{ d.4 }}{% endif %}</span></li>{% endfor %}
+<li class="list-group-item small">{% trans "Decision closure time = average days from a decision's registration to its verified closure. Overdue tasks = open tasks past their deadline. The overall score is the weighted average of the rates above (weights in Settings); it never grows with the number of meetings, decisions or tasks." %}</li></ul></div>
+{% endblock %}

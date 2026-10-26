@@ -1,0 +1,120 @@
+{% extends "base.html" %}{% load i18n scgms %}
+{% block title %}{{ c.name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  <div class="grow">
+    <div class="small-muted"><a href="{% url 'committees:list' %}">{% trans "Committees" %}</a> / <span class="code">{{ c.code }}</span></div>
+    <h1>{{ c.name }}</h1><div class="sub">{{ c.other_name }}{% if c.formed_on %} · {% trans "formed on" %} {{ c.formed_on }}{% endif %}{% if c.formation_reference %} · {{ c.formation_reference }}{% endif %}</div>
+  </div>
+  {% badge "health" k.health %}
+  {% if can_meet %}<a class="btn btn-outline-primary" href="{% url 'committees:meeting_new' %}?committee={{ c.id }}"><i class="bi bi-calendar-plus"></i> {% trans "Schedule meeting" %}</a>{% endif %}
+  {% if can_task %}<a class="btn btn-outline-primary" href="{% url 'governance:task_new' %}?committee={{ c.id }}"><i class="bi bi-plus-lg"></i> {% trans "Add task" %}</a>{% endif %}
+  {% if is_exec %}<a class="btn btn-danger" href="{% url 'governance:task_new' %}?urgent=1&committee={{ c.id }}"><i class="bi bi-lightning-charge"></i> {% trans "Urgent task" %}</a>{% endif %}
+  {% if can_manage %}<a class="btn btn-outline-secondary" href="{% url 'committees:edit' c.id %}"><i class="bi bi-pencil"></i> {% trans "Edit" %}</a>{% endif %}
+</div>
+
+<div class="row g-2 mb-3 row-cols-2 row-cols-md-6">
+  <div class="col"><div class="kpi {% if k.score != None and k.score >= 80 %}good{% elif k.score != None and k.score < 60 %}crit{% else %}warn{% endif %}"><div class="lbl">{% trans "Performance score" %}</div><div class="val">{{ k.score|pct }}</div></div></div>
+  <div class="col"><div class="kpi"><div class="lbl">{% trans "Decision implementation" %}</div><div class="val">{{ k.rates.decision.pct|pct }}</div><div class="hint">{{ k.rates.decision.num }}/{{ k.rates.decision.den }}</div></div></div>
+  <div class="col"><div class="kpi"><div class="lbl">{% trans "Task completion" %}</div><div class="val">{{ k.rates.task.pct|pct }}</div><div class="hint">{{ k.rates.task.num }}/{{ k.rates.task.den }}</div></div></div>
+  <div class="col"><div class="kpi"><div class="lbl">{% trans "Meetings held / due" %}</div><div class="val">{{ k.meetings_held }} <small>/ {{ k.meetings_scheduled }}</small></div></div></div>
+  <div class="col"><div class="kpi {% if k.overdue_tasks %}crit{% endif %}"><div class="lbl">{% trans "Overdue tasks" %}</div><div class="val">{{ k.overdue_tasks }}</div></div></div>
+  <div class="col"><div class="kpi {% if moms_due %}warn{% endif %}"><div class="lbl">{% trans "Minutes outstanding" %}</div><div class="val">{{ moms_due|length }}</div></div></div>
+</div>
+
+<ul class="nav nav-tabs mb-3 flex-nowrap overflow-auto">
+<li class="nav-item"><a class="nav-link {% if tab == 'overview' %}active{% endif %}" href="?tab=overview">{% trans "Overview" %}</a></li>
+<li class="nav-item"><a class="nav-link {% if tab == 'members' %}active{% endif %}" href="?tab=members">{% trans "Members" %}</a></li>
+<li class="nav-item"><a class="nav-link {% if tab == 'meetings' %}active{% endif %}" href="?tab=meetings">{% trans "Meetings & MOMs" %}</a></li>
+<li class="nav-item"><a class="nav-link {% if tab == 'decisions' %}active{% endif %}" href="?tab=decisions">{% trans "Decisions" %}</a></li>
+<li class="nav-item"><a class="nav-link {% if tab == 'tasks' %}active{% endif %}" href="?tab=tasks">{% trans "Tasks" %}</a></li>
+<li class="nav-item"><a class="nav-link {% if tab == 'plan' %}active{% endif %}" href="?tab=plan">{% trans "Annual action plan" %}</a></li>
+<li class="nav-item"><a class="nav-link {% if tab == 'documents' %}active{% endif %}" href="?tab=documents">{% trans "Documents" %}</a></li>
+<li class="nav-item"><a class="nav-link {% if tab == 'performance' %}active{% endif %}" href="?tab=performance">{% trans "Performance" %}</a></li>
+<li class="nav-item"><a class="nav-link {% if tab == 'history' %}active{% endif %}" href="?tab=history">{% trans "History" %}</a></li>
+</ul>
+
+{% if tab == 'overview' %}
+<div class="row g-3">
+<div class="col-lg-7">
+  {% if c.description or c.objectives %}<div class="card mb-3"><div class="card-body">
+    {% if c.description %}<h3 class="h6">{% trans "Description" %}</h3><p class="mb-2" style="white-space:pre-line">{{ c.description }}</p>{% endif %}
+    {% if c.objectives %}<h3 class="h6">{% trans "Objectives" %}</h3><p class="mb-0" style="white-space:pre-line">{{ c.objectives }}</p>{% endif %}</div></div>{% endif %}
+  <div class="card mb-3"><div class="card-header">{% trans "Official responsibilities" %}</div>
+  <ol class="list-group list-group-flush list-group-numbered">{% for r in c.responsibilities.all %}<li class="list-group-item d-flex">{{ r.text }}{% if can_manage %}<form method="post" action="{% url 'committees:responsibility_save' c.id %}" class="ms-auto">{% csrf_token %}<button class="btn btn-sm btn-link text-danger p-0" name="delete" value="{{ r.id }}" title="{% trans 'Remove' %}"><i class="bi bi-x"></i></button></form>{% endif %}</li>{% empty %}<li class="list-group-item muted">{% trans "Not recorded yet." %}</li>{% endfor %}</ol>
+  {% if can_manage %}<div class="card-body border-top"><form method="post" action="{% url 'committees:responsibility_save' c.id %}" class="row g-2">{% csrf_token %}<div class="col-md-6"><input class="form-control form-control-sm" name="text_ar" placeholder="{% trans 'Responsibility (Arabic)' %}" required></div><div class="col-md-4"><input class="form-control form-control-sm" name="text_en" placeholder="{% trans 'English (optional)' %}"></div><div class="col-md-2"><button class="btn btn-sm btn-outline-primary w-100">{% trans "Add" %}</button></div></form></div>{% endif %}</div>
+</div>
+<div class="col-lg-5">
+  <div class="card mb-3"><div class="card-header"><i class="bi bi-exclamation-circle text-danger"></i>{% trans "Outstanding obligations" %}</div><ul class="list-group list-group-flush">
+    {% for m in moms_due %}<li class="list-group-item"><a href="{% url 'committees:meeting' m.id %}#mom">{% trans "Minutes due" %}: {% trans "meeting" %} {{ m.number }} · {{ m.date }}</a> {% badge "mom" m.mom.status %}</li>{% endfor %}
+    {% for t in overdue_tasks %}<li class="list-group-item"><a href="{% url 'governance:task' t.id %}"><span class="code">{{ t.code }}</span> {{ t.title|truncatechars:60 }}</a> <span class="text-danger small">{% blocktrans with n=t.days_overdue %}{{ n }} days late{% endblocktrans %}</span></li>{% endfor %}
+    {% for d in open_decisions|slice:":8" %}<li class="list-group-item"><a href="{% url 'governance:decision' d.id %}"><span class="code">{{ d.code }}</span> {{ d.title|truncatechars:60 }}</a> {% decision_badge d %}</li>{% endfor %}
+    {% if not moms_due and not overdue_tasks and not open_decisions %}<li class="list-group-item muted">{% trans "Nothing outstanding." %}</li>{% endif %}
+  </ul></div>
+  <div class="card mb-3"><div class="card-header">{% trans "Leadership and schedule" %}</div><div class="card-body small">
+    <div><b>{% trans "Chair" %}:</b> {{ c.chair.display_name|default:"—" }}</div>
+    <div><b>{% trans "Secretary" %}:</b> {{ c.secretary.display_name|default:_("Not assigned — the chair handles the minutes") }}</div>
+    <div class="mt-2"><b>{% trans "Regular meetings" %}:</b> {% if c.has_schedule %}{{ c.get_meeting_frequency_display }}{% if c.meeting_week %} · {% trans "week" %} {{ c.meeting_week }}{% endif %} · {{ c.meeting_weekday|weekday }} {% if c.meeting_time %}· {{ c.meeting_time|time:"H:i" }}{% endif %}{% else %}<span class="text-warning">{% trans "Not set — configure it under Edit" %}</span>{% endif %}</div>
+    <div><b>{% trans "Venue" %}:</b> {{ c.venue|default:"—" }}</div><div><b>{% trans "Reporting" %}:</b> {{ c.get_report_frequency_display }}</div>
+    <div class="mt-2"><b>{% trans "Next meeting" %}:</b> {% if next_meeting %}<a href="{% url 'committees:meeting' next_meeting.id %}">{{ next_meeting.date }}</a>{% else %}—{% endif %}</div>
+  </div></div>
+</div></div>
+
+{% elif tab == 'members' %}
+<div class="card mb-3"><div class="table-responsive"><table class="table align-middle"><thead><tr><th>{% trans "Name" %}</th><th>{% trans "Role" %}</th><th>{% trans "Assignment" %}</th><th>{% trans "From" %}</th><th>{% trans "To" %}</th><th></th></tr></thead><tbody>
+{% for m in memberships %}<tr class="{% if m.end_date %}text-muted{% endif %}"><td><span class="avatar me-1">{{ m.user|initials }}</span> {{ m.user.display_name }}</td><td>{{ m.role|role_label }}</td><td class="small">{{ m.note }}</td><td class="small">{{ m.start_date }}</td><td class="small">{{ m.end_date|default:"" }}</td>
+<td>{% if can_manage and not m.end_date %}<form method="post" action="{% url 'committees:member_end' c.id m.id %}" onsubmit="return confirm('{% trans "End this membership? The record is kept." %}')">{% csrf_token %}<button class="btn btn-sm btn-outline-danger">{% trans "End" %}</button></form>{% endif %}</td></tr>{% endfor %}
+</tbody></table></div></div>
+{% if can_manage %}<div class="card"><div class="card-header">{% trans "Add a member or change a role" %}</div><div class="card-body">
+<form method="post" action="{% url 'committees:member_set' c.id %}" class="row g-2">{% csrf_token %}
+<div class="col-md-4"><select class="form-select" name="user" required>{% for u in users %}<option value="{{ u.id }}">{{ u.display_name }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><select class="form-select" name="role">{% for v, l in roles %}<option value="{{ v }}" {% if v == 'member' %}selected{% endif %}>{{ l }}</option>{% endfor %}</select></div>
+<div class="col-md-4"><input class="form-control" name="note" placeholder="{% trans 'Assignment (optional)' %}"></div>
+<div class="col-md-2"><button class="btn btn-primary w-100">{% trans "Save" %}</button></div></form>
+<div class="form-text">{% trans "Changing a role closes the old membership and opens a new one, so the history is preserved. A new chair or secretary replaces the previous one, who stays as a member." %}</div></div></div>{% endif %}
+
+{% elif tab == 'meetings' %}
+{% if can_meet %}<div class="card mb-3"><div class="card-body d-flex flex-wrap gap-2 align-items-center">
+{% if c.has_schedule %}<form method="post" action="{% url 'committees:generate_meetings' c.id %}" class="d-flex gap-2 align-items-center">{% csrf_token %}<span class="small">{% trans "Add the regular meetings to the calendar until" %}</span><input type="date" class="form-control form-control-sm" style="width:auto" name="end" value="{{ year.end_date|date:'Y-m-d' }}"><button class="btn btn-sm btn-outline-primary"><i class="bi bi-calendar-range"></i> {% trans "Generate" %}</button></form>
+{% else %}<span class="small text-warning">{% trans "Set the regular meeting day under Edit to generate the monthly calendar." %}</span>{% endif %}
+<a class="btn btn-sm btn-primary ms-auto" href="{% url 'committees:meeting_new' %}?committee={{ c.id }}">{% trans "Schedule a meeting" %}</a></div></div>{% endif %}
+<div class="card"><div class="table-responsive"><table class="table table-hover align-middle"><thead><tr><th>{% trans "No." %}</th><th>{% trans "Date" %}</th><th>{% trans "Type" %}</th><th>{% trans "Meeting" %}</th><th>{% trans "Minutes" %}</th><th>{% trans "Decisions" %}</th></tr></thead><tbody>
+{% for m in meetings %}<tr><td>{{ m.number }}/{{ m.academic_year.name }}</td><td><a href="{% url 'committees:meeting' m.id %}">{{ m.date }}</a>{% if m.is_demo %} <span class="demo-tag">DEMO</span>{% endif %}</td><td class="small">{{ m.get_kind_display }}</td><td>{% badge "meeting" m.status %}</td><td>{% badge "mom" m.mom.status %}</td><td>{{ m.decisions.count }}</td></tr>
+{% empty %}<tr><td colspan="6" class="empty">{% trans "No meetings yet." %}</td></tr>{% endfor %}</tbody></table></div></div>
+
+{% elif tab == 'decisions' %}
+<div class="card">{% include "partials/decision_table.html" %}</div>
+
+{% elif tab == 'tasks' %}
+<div class="card">{% include "partials/task_table.html" %}</div>
+
+{% elif tab == 'plan' %}
+<div class="card mb-3"><div class="card-header">{% trans "Annual action plan" %} {{ year.name }}</div>
+<div class="table-responsive"><table class="table align-middle"><thead><tr><th>{% trans "Activity" %}</th><th>{% trans "Target date" %}</th><th>{% trans "Responsible" %}</th><th>{% trans "Status" %}</th><th></th></tr></thead><tbody>
+{% for it in plan %}<tr><td>{{ it.title }}{% if it.description %}<div class="small-muted">{{ it.description }}</div>{% endif %}</td><td class="small">{{ it.target_date|default:"—" }}</td><td class="small">{{ it.responsible.display_name|default:"—" }}</td><td><span class="badge text-bg-light">{{ it.get_status_display }}</span></td>
+<td class="text-nowrap">{% if can_task and it.status == 'planned' %}<a class="btn btn-sm btn-outline-primary" href="{% url 'governance:task_new' %}?plan={{ it.id }}">{% trans "Convert to task" %}</a>{% endif %}
+{% for t in it.tasks.all %}<a class="code" href="{% url 'governance:task' t.id %}">{{ t.code }}</a> {% endfor %}</td></tr>
+{% empty %}<tr><td colspan="5" class="empty">{% trans "No plan items for this year." %}</td></tr>{% endfor %}</tbody></table></div>
+{% if can_task %}<div class="card-body border-top"><form method="post" action="{% url 'committees:plan_save' c.id %}" class="row g-2">{% csrf_token %}
+<div class="col-md-5"><input class="form-control form-control-sm" name="title" placeholder="{% trans 'Planned activity' %}" required></div>
+<div class="col-md-2"><input type="date" class="form-control form-control-sm" name="target_date"></div>
+<div class="col-md-3"><select class="form-select form-select-sm" name="responsible"><option value="">{% trans "Responsible" %}</option>{% for u in users %}<option value="{{ u.id }}">{{ u.display_name }}</option>{% endfor %}</select></div>
+<div class="col-md-2"><button class="btn btn-sm btn-primary w-100">{% trans "Add" %}</button></div></form></div>{% endif %}</div>
+
+{% elif tab == 'documents' %}
+<div class="d-flex mb-2 gap-2"><a class="btn btn-sm btn-outline-primary" href="{% url 'documents:archive' %}?committee={{ c.id }}"><i class="bi bi-folder2-open"></i> {% trans "Open in filing archive" %}</a><a class="btn btn-sm btn-outline-secondary" href="{% url 'documents:export' c.id %}"><i class="bi bi-file-zip"></i> {% trans "Export committee records (ZIP)" %}</a></div>
+<div class="card">{% include "partials/document_table.html" %}</div>
+
+{% elif tab == 'performance' %}
+<div class="card"><div class="card-header">{% trans "Evidence-based scorecard" %} · {{ year.name }}</div><div class="table-responsive"><table class="table align-middle"><thead><tr><th>{% trans "Indicator" %}</th><th>{% trans "Formula" %}</th><th class="text-center">{% trans "Numerator / denominator" %}</th><th class="text-center">{% trans "Rate" %}</th></tr></thead><tbody>
+{% for d in kpi_defs %}{% with r=k.rates|get:d.0 %}<tr><td class="fw-semibold">{% if LANGUAGE_CODE == 'en' %}{{ d.1 }}{% else %}{{ d.2 }}{% endif %}</td><td class="small">{% if LANGUAGE_CODE == 'en' %}{{ d.3 }}{% else %}{{ d.4 }}{% endif %}</td><td class="text-center">{{ r.num }} / {{ r.den }}</td><td class="text-center fw-bold">{{ r.pct|pct }}</td></tr>{% endwith %}{% endfor %}
+<tr><td class="fw-semibold">{% trans "Overdue tasks" %}</td><td class="small">{% trans "Open tasks past their deadline" %}</td><td class="text-center">—</td><td class="text-center fw-bold {% if k.overdue_tasks %}text-danger{% endif %}">{{ k.overdue_tasks }}</td></tr>
+<tr><td class="fw-semibold">{% trans "Decision closure time" %}</td><td class="small">{% trans "Average days from registration to verified closure" %}</td><td class="text-center">—</td><td class="text-center fw-bold">{{ k.avg_closure_days|default:"—" }}</td></tr>
+<tr class="table-light"><td class="fw-bold">{% trans "Overall score" %}</td><td class="small">{% trans "Weighted average of the rates (weights in Settings)" %}</td><td></td><td class="text-center fw-bold fs-5">{{ k.score|pct }}</td></tr>
+</tbody></table></div></div>
+
+{% elif tab == 'history' %}
+{% if past_members %}<div class="card mb-3"><div class="card-header">{% trans "Past memberships" %}</div><ul class="list-group list-group-flush">{% for m in past_members %}<li class="list-group-item small">{{ m.user.display_name }} — {{ m.role|role_label }} ({{ m.start_date }} → {{ m.end_date }})</li>{% endfor %}</ul></div>{% endif %}
+<div class="card"><div class="card-header">{% trans "Activity history" %}</div><ul class="list-group list-group-flush">{% for a in logs %}<li class="list-group-item small"><span class="muted">{{ a.created_at|date:"Y-m-d H:i" }}</span> · {{ a.actor.display_name|default:"system" }} · {{ a.message }}</li>{% empty %}<li class="list-group-item muted">{% trans "No activity yet." %}</li>{% endfor %}</ul></div>
+{% endif %}
+{% endblock %}
