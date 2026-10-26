@@ -1,0 +1,185 @@
+<!doctype html>
+
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Task Management · SCGMS</title>
+<link rel="icon" href="/scgms/static/img/logo.jpg">
+<link rel="stylesheet" href="/scgms/static/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/scgms/static/vendor/icons/bootstrap-icons.min.css">
+<link rel="stylesheet" href="/scgms/static/css/app.css">
+
+</head>
+<body hx-headers='{"X-CSRFToken": "vr0LOTUlzd1HoiOtypJUmjmOnVuqZ3NBFyLOWUzL0jtd55xUasXqnekupWd0YQIb"}'><div style="background:#fff3cd;color:#664d03;text-align:center;padding:6px 10px;font-size:13px;border-bottom:1px solid #ffe69c;position:sticky;top:0;z-index:2000">Static demo – read-only snapshot with sample data. Forms, login, uploads and exports are disabled.</div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="/scgms/static/img/logo.jpg" alt="">
+    <div><b>Committee Governance</b><small>School of Computing and Data Science</small></div>
+  </div>
+  <nav class="nav flex-column">
+    
+    <a class="nav-link " href="/scgms/en/overview/"><i class="bi bi-speedometer2"></i>Executive Overview</a>
+    
+    <a class="nav-link " href="/scgms/en/me/"><i class="bi bi-person-workspace"></i>My Dashboard</a>
+    <a class="nav-link " href="/scgms/en/committees/"><i class="bi bi-diagram-3"></i>Committees</a>
+    <a class="nav-link " href="/scgms/en/committees/meetings/"><i class="bi bi-calendar3"></i>Committee Meetings</a>
+    <a class="nav-link " href="/scgms/en/committees/moms/"><i class="bi bi-file-earmark-text"></i>MOMs & Approvals</a>
+    <a class="nav-link " href="/scgms/en/decisions/"><i class="bi bi-check2-square"></i>Decisions & Action Items</a>
+    <a class="nav-link active" href="/scgms/en/tasks/"><i class="bi bi-list-task"></i>Task Management</a>
+    
+    <a class="nav-link " href="/scgms/en/follow-up/"><i class="bi bi-bullseye"></i>Management Follow-Up Center</a>
+    
+    <a class="nav-link " href="/scgms/en/archive/"><i class="bi bi-archive"></i>Digital Filing Archive</a>
+    <a class="nav-link " href="/scgms/en/reports/"><i class="bi bi-bar-chart-line"></i>Reports & Analytics</a>
+    <a class="nav-link " href="#" onclick="return false" data-disabled="1"><i class="bi bi-bell"></i>Notifications</a>
+    
+    <a class="nav-link " href="/scgms/en/administration/"><i class="bi bi-gear"></i>Administration & Settings</a>
+    
+  </nav>
+  <div class="foot">Badya University · SCGMS</div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <button class="btn btn-sm btn-outline-secondary d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="Menu"><i class="bi bi-list"></i></button>
+    <div class="flex-grow-1"></div>
+    <a class="btn btn-sm btn-danger" href="#" onclick="return false" data-disabled="1"><i class="bi bi-lightning-charge-fill"></i> Assign Urgent Task</a>
+    <a class="btn btn-sm btn-outline-secondary" href="/scgms/ar/tasks/">العربية</a>
+    <a href="#" onclick="return false" data-disabled="1" class="btn btn-sm btn-light position-relative" aria-label="Notifications"><i class="bi bi-bell"></i>
+      <span   ></span></a>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown"><span class="avatar">SA</span><span class="who d-none d-md-inline">System Administrator</span></button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><span class="dropdown-item-text small-muted">System Administrator</span></li>
+        <li><a class="dropdown-item" href="/scgms/en/accounts/profile/">My profile</a></li>
+        <li><a class="dropdown-item" href="#" onclick="return false" data-disabled="1">Change password</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><form method="post" action="#" onclick="return false" data-disabled="1"><button class="dropdown-item">Log out</button></form></li>
+      </ul>
+    </div>
+  </header>
+  <main class="content">
+    
+    
+<div class="page-head"><div class="grow"><h1>Task Management</h1><div class="sub">Committee-generated tasks (from decisions, action plans and responsibilities) and top management assignments.</div></div>
+<a class="btn btn-danger" href="#" onclick="return false" data-disabled="1"><i class="bi bi-lightning-charge"></i> Assign Urgent Task</a>
+<a class="btn btn-outline-primary" href="#" onclick="return false" data-disabled="1"><i class="bi bi-plus-lg"></i> Committee task</a></div>
+<ul class="nav nav-tabs mb-3">
+<li class="nav-item"><a class="nav-link " href="?scope=mine">My tasks</a></li>
+<li class="nav-item"><a class="nav-link " href="?scope=review">Waiting for my verification</a></li>
+<li class="nav-item"><a class="nav-link active" href="?scope=all">All visible tasks</a></li></ul>
+<form class="filters row g-2" method="get"><input type="hidden" name="scope" value="all">
+<div class="col-md-3"><input class="form-control form-control-sm" name="q" value="" placeholder="Search ID or title…"></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="committee"><option value="">All committees</option><option value="1" >Scientific Research Committee</option><option value="2" >Library Committee</option><option value="3" >Student Affairs &amp; Examinations Committee</option><option value="4" >Laboratories Committee</option><option value="5" >Follow-up &amp; Timetable Committee</option><option value="6" >Student Activities &amp; Seminars Committee</option><option value="7" >Academic Advising Committee</option><option value="8" >Quality Committee</option><option value="9" >Examination Control</option><option value="10" >Student Training Committee</option><option value="11" >Agreements &amp; Partnerships Committee</option><option value="12" >Heads of Academic Departments</option></select></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="status"><option value="open" selected>Open</option><option value="overdue" >Overdue</option><option value="not_started" >Not started</option><option value="in_progress" >In progress</option><option value="blocked" >Blocked</option><option value="submitted" >Submitted for verification</option><option value="returned" >Returned for more work</option><option value="verified" >Verified and closed</option><option value="cancelled" >Cancelled</option><option value="all" >All</option></select></div>
+<div class="col-md-1"><select class="form-select form-select-sm" name="priority"><option value="">Priority</option><option value="low" >Low</option><option value="medium" >Medium</option><option value="high" >High</option><option value="urgent" >Urgent</option></select></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="source"><option value="">Any source</option><option value="decision" >Meeting decision</option><option value="plan" >Annual action plan</option><option value="committee" >Committee responsibility</option><option value="management" >Top management assignment</option></select></div>
+<div class="col-md-1"><select class="form-select form-select-sm" name="person"><option value="">Responsible</option><option value="5" >Prof. Gaber Osman</option><option value="3" >Prof. Ghada Khoriba</option><option value="4" >Prof. Ghada Abdelhady</option><option value="2" >Prof. Mohamed Helmy Khafagy</option><option value="10" >Dr. Amira Gaber</option><option value="11" >Dr. Amira Afifi</option><option value="8" >Dr. Engy Ragaey</option><option value="13" >Dr. Eyad Mamdouh</option><option value="7" >Dr. Abdallah Mamdouh</option><option value="12" >Dr. Mohamed Mamdouh</option><option value="9" >Dr. Marwa Elanany</option><option value="6" >Dr. Noha Mokhtar</option><option value="26" >Eng. Bassant Hassan</option><option value="23" >Eng. Rana Abouzeid</option><option value="14" >Eng. Rana Hamed</option><option value="15" >Eng. Ziad Nabil</option><option value="22" >Eng. Salwa Mabrouk</option><option value="21" >Eng. Seham Ahmed</option><option value="20" >Eng. Seham Ali</option><option value="24" >Eng. Abdelrahman Moawad</option><option value="19" >Eng. Abeer Sarhan</option><option value="16" >Eng. Mohamed Helmy</option><option value="18" >Eng. Mohamed Khaled</option><option value="17" >Eng. Mohamed Abdo</option><option value="25" >Eng. Nouran Elmasry</option><option value="1" >System Administrator</option></select></div>
+<div class="col-md-1"><button class="btn btn-sm btn-primary w-100">Filter</button></div></form>
+<div class="card">
+<div class="table-responsive"><table class="table table-hover align-middle">
+<thead><tr><th>ID</th><th>Task</th><th>Committee</th><th>Responsible</th><th>Deadline</th><th style="min-width:110px">Progress</th><th>Status</th></tr></thead>
+<tbody><tr>
+<td><a class="code" href="/scgms/en/tasks/9/">MGT-2627-001</a> <span class="demo-tag">DEMO</span></td>
+<td><a href="/scgms/en/tasks/9/" class="text-body">تقرير إحصائي بأعداد الطلاب المقيدين لمجلس الجامعة</a> <span class="badge text-bg-danger">Urgent</span>
+  <div class="small-muted">Top management assignment</div>
+  </td>
+<td class="small">Student Affairs &amp; Examinations Committee</td>
+<td class="small">Eng. Mohamed Khaled</td>
+<td class="small text-danger fw-bold">2026-10-19<div>7 days late</div></td>
+<td><div class="progress"><div class="progress-bar " style="width:50%"></div></div><span class="small-muted">50%</span></td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Overdue</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/en/tasks/10/">MGT-2627-002</a> <span class="demo-tag">DEMO</span></td>
+<td><a href="/scgms/en/tasks/10/" class="text-body">مراجعة توصيف المقررات قبل زيارة المراجعين</a> <span class="badge text-bg-danger">Urgent</span>
+  <div class="small-muted">Top management assignment</div>
+  </td>
+<td class="small">Quality Committee</td>
+<td class="small">Dr. Engy Ragaey، Dr. Amira Afifi</td>
+<td class="small ">2026-11-01</td>
+<td><div class="progress"><div class="progress-bar " style="width:0%"></div></div><span class="small-muted">0%</span></td>
+<td><span class="badge text-bg-secondary  st-badge"><i class="bi bi-circle"></i> Not started</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/en/tasks/11/">MGT-2627-003</a> <span class="demo-tag">DEMO</span></td>
+<td><a href="/scgms/en/tasks/11/" class="text-body">حصر احتياجات المعامل من التراخيص للفصل الثاني</a> <span class="badge text-bg-danger">Urgent</span>
+  <div class="small-muted">Top management assignment</div>
+  </td>
+<td class="small">Laboratories Committee</td>
+<td class="small">Eng. Rana Abouzeid</td>
+<td class="small ">2026-10-25</td>
+<td><div class="progress"><div class="progress-bar " style="width:100%"></div></div><span class="small-muted">100%</span></td>
+<td><span class="badge text-bg-info text-dark st-badge"><i class="bi bi-hourglass-split"></i> Submitted for verification</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/en/tasks/2/">TSK-2627-002</a> <span class="demo-tag">DEMO</span></td>
+<td><a href="/scgms/en/tasks/2/" class="text-body">نشر الدليل على موقع الكلية وLMS</a>
+  <div class="small-muted">From decision DEC-2627-SAE-001</div>
+  </td>
+<td class="small">Student Affairs &amp; Examinations Committee</td>
+<td class="small">Eng. Mohamed Khaled</td>
+<td class="small text-danger fw-bold">2026-10-20<div>6 days late</div></td>
+<td><div class="progress"><div class="progress-bar " style="width:60%"></div></div><span class="small-muted">60%</span></td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Overdue</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/en/tasks/7/">TSK-2627-007</a> <span class="demo-tag">DEMO</span></td>
+<td><a href="/scgms/en/tasks/7/" class="text-body">كتابة مسودة المقترح البحثي</a>
+  <div class="small-muted">From decision DEC-2627-RES-001</div>
+  </td>
+<td class="small">Scientific Research Committee</td>
+<td class="small">Prof. Ghada Khoriba، Eng. Ziad Nabil</td>
+<td class="small ">2026-11-30</td>
+<td><div class="progress"><div class="progress-bar " style="width:0%"></div></div><span class="small-muted">0%</span></td>
+<td><span class="badge text-bg-secondary  st-badge"><i class="bi bi-circle"></i> Not started</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/en/tasks/3/">TSK-2627-003</a> <span class="demo-tag">DEMO</span></td>
+<td><a href="/scgms/en/tasks/3/" class="text-body">تفعيل أداة الحضور في مقررات الفصل الأول</a>
+  <div class="small-muted">From decision DEC-2627-SAE-002</div>
+  </td>
+<td class="small">Student Affairs &amp; Examinations Committee</td>
+<td class="small">Eng. Abeer Sarhan</td>
+<td class="small ">2026-10-10</td>
+<td><div class="progress"><div class="progress-bar " style="width:100%"></div></div><span class="small-muted">100%</span></td>
+<td><span class="badge text-bg-info text-dark st-badge"><i class="bi bi-hourglass-split"></i> Submitted for verification</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/en/tasks/5/">TSK-2627-005</a> <span class="demo-tag">DEMO</span></td>
+<td><a href="/scgms/en/tasks/5/" class="text-body">إعداد آلية الطلاب المتعثرين وكشف المستهدفين</a>
+  <div class="small-muted">From decision DEC-2627-ADV-002</div>
+  </td>
+<td class="small">Academic Advising Committee</td>
+<td class="small">Eng. Seham Ahmed</td>
+<td class="small text-danger fw-bold">2026-10-25<div>1 days late</div></td>
+<td><div class="progress"><div class="progress-bar " style="width:40%"></div></div><span class="small-muted">40%</span></td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Overdue</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/en/tasks/6/">TSK-2627-006</a> <span class="demo-tag">DEMO</span></td>
+<td><a href="/scgms/en/tasks/6/" class="text-body">تنظيم ندوة الذكاء الاصطناعي التوليدي</a>
+  <div class="small-muted">From decision DEC-2627-ACT-001</div>
+  </td>
+<td class="small">Student Activities &amp; Seminars Committee</td>
+<td class="small">Eng. Nouran Elmasry، Eng. Bassant Hassan</td>
+<td class="small ">2026-11-05</td>
+<td><div class="progress"><div class="progress-bar " style="width:30%"></div></div><span class="small-muted">30%</span></td>
+<td><span class="badge text-bg-primary  st-badge"><i class="bi bi-arrow-repeat"></i> In progress</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/en/tasks/8/">TSK-2627-008</a> <span class="demo-tag">DEMO</span></td>
+<td><a href="/scgms/en/tasks/8/" class="text-body">تجهيز الميزانية والجدول الزمني للمقترح</a>
+  <div class="small-muted">From decision DEC-2627-RES-001</div>
+  </td>
+<td class="small">Scientific Research Committee</td>
+<td class="small">Eng. Rana Hamed</td>
+<td class="small ">2026-12-05</td>
+<td><div class="progress"><div class="progress-bar " style="width:0%"></div></div><span class="small-muted">0%</span></td>
+<td><span class="badge text-bg-secondary  st-badge"><i class="bi bi-circle"></i> Not started</span></td></tr>
+</tbody></table></div>
+</div>
+
+
+
+  </main>
+</div>
+<script src="/scgms/static/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/scgms/static/vendor/htmx/htmx.min.js"></script>
+
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));</script></body>
+</html>

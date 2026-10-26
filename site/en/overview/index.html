@@ -1,0 +1,257 @@
+<!doctype html>
+
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Executive Overview · SCGMS</title>
+<link rel="icon" href="/scgms/static/img/logo.jpg">
+<link rel="stylesheet" href="/scgms/static/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/scgms/static/vendor/icons/bootstrap-icons.min.css">
+<link rel="stylesheet" href="/scgms/static/css/app.css">
+
+</head>
+<body hx-headers='{"X-CSRFToken": "Ki86e2luTqU8EIKVauNt3ZTHYEO5pUH0UpT9m30UkwmElvtmMx1Z4URn0FxFoHCA"}'><div style="background:#fff3cd;color:#664d03;text-align:center;padding:6px 10px;font-size:13px;border-bottom:1px solid #ffe69c;position:sticky;top:0;z-index:2000">Static demo – read-only snapshot with sample data. Forms, login, uploads and exports are disabled.</div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="/scgms/static/img/logo.jpg" alt="">
+    <div><b>Committee Governance</b><small>School of Computing and Data Science</small></div>
+  </div>
+  <nav class="nav flex-column">
+    
+    <a class="nav-link active" href="/scgms/en/overview/"><i class="bi bi-speedometer2"></i>Executive Overview</a>
+    
+    <a class="nav-link " href="/scgms/en/me/"><i class="bi bi-person-workspace"></i>My Dashboard</a>
+    <a class="nav-link " href="/scgms/en/committees/"><i class="bi bi-diagram-3"></i>Committees</a>
+    <a class="nav-link " href="/scgms/en/committees/meetings/"><i class="bi bi-calendar3"></i>Committee Meetings</a>
+    <a class="nav-link " href="/scgms/en/committees/moms/"><i class="bi bi-file-earmark-text"></i>MOMs & Approvals</a>
+    <a class="nav-link " href="/scgms/en/decisions/"><i class="bi bi-check2-square"></i>Decisions & Action Items</a>
+    <a class="nav-link " href="/scgms/en/tasks/"><i class="bi bi-list-task"></i>Task Management</a>
+    
+    <a class="nav-link " href="/scgms/en/follow-up/"><i class="bi bi-bullseye"></i>Management Follow-Up Center</a>
+    
+    <a class="nav-link " href="/scgms/en/archive/"><i class="bi bi-archive"></i>Digital Filing Archive</a>
+    <a class="nav-link " href="/scgms/en/reports/"><i class="bi bi-bar-chart-line"></i>Reports & Analytics</a>
+    <a class="nav-link " href="#" onclick="return false" data-disabled="1"><i class="bi bi-bell"></i>Notifications</a>
+    
+    <a class="nav-link " href="/scgms/en/administration/"><i class="bi bi-gear"></i>Administration & Settings</a>
+    
+  </nav>
+  <div class="foot">Badya University · SCGMS</div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <button class="btn btn-sm btn-outline-secondary d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="Menu"><i class="bi bi-list"></i></button>
+    <div class="flex-grow-1"></div>
+    <a class="btn btn-sm btn-danger" href="#" onclick="return false" data-disabled="1"><i class="bi bi-lightning-charge-fill"></i> Assign Urgent Task</a>
+    <a class="btn btn-sm btn-outline-secondary" href="/scgms/ar/overview/">العربية</a>
+    <a href="#" onclick="return false" data-disabled="1" class="btn btn-sm btn-light position-relative" aria-label="Notifications"><i class="bi bi-bell"></i>
+      <span   ></span></a>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown"><span class="avatar">SA</span><span class="who d-none d-md-inline">System Administrator</span></button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><span class="dropdown-item-text small-muted">System Administrator</span></li>
+        <li><a class="dropdown-item" href="/scgms/en/accounts/profile/">My profile</a></li>
+        <li><a class="dropdown-item" href="#" onclick="return false" data-disabled="1">Change password</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><form method="post" action="#" onclick="return false" data-disabled="1"><button class="dropdown-item">Log out</button></form></li>
+      </ul>
+    </div>
+  </header>
+  <main class="content">
+    
+    
+<div class="page-head">
+  <div class="grow"><h1>Executive Overview</h1>
+    <div class="sub">What requires attention today, who is responsible, and what is preventing completion. · 2026-09-01 → 2027-08-31</div></div>
+  <a class="btn btn-danger" href="#" onclick="return false" data-disabled="1"><i class="bi bi-plus-lg"></i> Assign Urgent Task</a>
+  <a class="btn btn-outline-primary" href="/scgms/en/follow-up/"><i class="bi bi-bullseye"></i> Follow-Up Center <span class="badge text-bg-danger">4</span></a>
+</div>
+
+<form class="filters row g-2 align-items-end" method="get">
+  <div class="col-6 col-md-4 col-xl-2"><label class="form-label small mb-1">Academic year</label>
+    <select class="form-select form-select-sm" name="year" onchange="this.form.submit()"><option value="1" selected>2026-2027</option></select></div>
+  <div class="col-6 col-md-4 col-xl-2"><label class="form-label small mb-1">Semester</label>
+    <select class="form-select form-select-sm" name="semester" onchange="this.form.submit()"><option value="">Whole year</option><option value="1" >Fall 2026-2027</option><option value="2" >Spring 2026-2027</option></select></div>
+  <div class="col-12 col-md-4 col-xl-3"><label class="form-label small mb-1">Committee</label>
+    <select class="form-select form-select-sm" name="committee"><option value="">All committees</option><option value="1" >Scientific Research Committee</option><option value="2" >Library Committee</option><option value="3" >Student Affairs &amp; Examinations Committee</option><option value="4" >Laboratories Committee</option><option value="5" >Follow-up &amp; Timetable Committee</option><option value="6" >Student Activities &amp; Seminars Committee</option><option value="7" >Academic Advising Committee</option><option value="8" >Quality Committee</option><option value="9" >Examination Control</option><option value="10" >Student Training Committee</option><option value="11" >Agreements &amp; Partnerships Committee</option><option value="12" >Heads of Academic Departments</option></select></div>
+  <div class="col-6 col-md-4 col-xl-2"><label class="form-label small mb-1">From</label><input type="date" class="form-control form-control-sm" name="from" value="2026-09-01"></div>
+  <div class="col-6 col-md-4 col-xl-2"><label class="form-label small mb-1">To</label><input type="date" class="form-control form-control-sm" name="to" value="2027-08-31"></div>
+  
+  <div class="col-6 col-md-4 col-xl-3"><label class="form-label small mb-1">Priority</label>
+    <select class="form-select form-select-sm" name="priority"><option value="">Any</option><option value="low" >Low</option><option value="medium" >Medium</option><option value="high" >High</option><option value="urgent" >Urgent</option></select></div>
+  <div class="col-6 col-md-4 col-xl-3"><label class="form-label small mb-1">Responsible</label>
+    <select class="form-select form-select-sm" name="person"><option value="">Anyone</option><option value="5" >Prof. Gaber Osman</option><option value="3" >Prof. Ghada Khoriba</option><option value="4" >Prof. Ghada Abdelhady</option><option value="2" >Prof. Mohamed Helmy Khafagy</option><option value="10" >Dr. Amira Gaber</option><option value="11" >Dr. Amira Afifi</option><option value="8" >Dr. Engy Ragaey</option><option value="13" >Dr. Eyad Mamdouh</option><option value="7" >Dr. Abdallah Mamdouh</option><option value="12" >Dr. Mohamed Mamdouh</option><option value="9" >Dr. Marwa Elanany</option><option value="6" >Dr. Noha Mokhtar</option><option value="26" >Eng. Bassant Hassan</option><option value="23" >Eng. Rana Abouzeid</option><option value="14" >Eng. Rana Hamed</option><option value="15" >Eng. Ziad Nabil</option><option value="22" >Eng. Salwa Mabrouk</option><option value="21" >Eng. Seham Ahmed</option><option value="20" >Eng. Seham Ali</option><option value="24" >Eng. Abdelrahman Moawad</option><option value="19" >Eng. Abeer Sarhan</option><option value="16" >Eng. Mohamed Helmy</option><option value="18" >Eng. Mohamed Khaled</option><option value="17" >Eng. Mohamed Abdo</option><option value="25" >Eng. Nouran Elmasry</option><option value="1" >System Administrator</option></select></div>
+  <div class="col-6 col-md-4 col-xl-3"><label class="form-label small mb-1">Task status</label>
+    <select class="form-select form-select-sm" name="status"><option value="">Any</option><option value="not_started" >Not started</option><option value="in_progress" >In progress</option><option value="blocked" >Blocked</option><option value="submitted" >Submitted for verification</option><option value="returned" >Returned for more work</option><option value="verified" >Verified and closed</option><option value="cancelled" >Cancelled</option></select></div>
+  
+  <div class="col-6 col-md-4 col-xl-3 d-flex gap-1"><button class="btn btn-sm btn-primary flex-fill">Apply</button><a class="btn btn-sm btn-outline-secondary" href="?" title="Reset"><i class="bi bi-x-lg"></i></a></div>
+</form>
+
+
+<div class="row g-3 mb-3">
+  <div class="col-xl-7">
+    <div class="card h-100"><div class="card-header"><i class="bi bi-exclamation-diamond text-danger"></i>Requires your attention<a class="ms-auto small" href="/scgms/en/follow-up/">Open follow-up center</a></div>
+    <div class="list-group list-group-flush" style="max-height:360px;overflow:auto">
+      
+      <a class="list-group-item list-group-item-action d-flex gap-2" href="/scgms/en/tasks/11/"><i class="bi bi-patch-check text-info"></i><div class="flex-grow-1">Verify evidence: <span class="code">MGT-2627-003</span> حصر احتياجات المعامل من التراخيص للفصل الثاني<div class="small-muted">Eng. Rana Abouzeid</div></div><span class="badge text-bg-info text-dark st-badge"><i class="bi bi-hourglass-split"></i> Submitted for verification</span></a><a class="list-group-item list-group-item-action d-flex gap-2" href="/scgms/en/tasks/3/"><i class="bi bi-patch-check text-info"></i><div class="flex-grow-1">Verify evidence: <span class="code">TSK-2627-003</span> تفعيل أداة الحضور في مقررات الفصل الأول<div class="small-muted">Eng. Abeer Sarhan</div></div><span class="badge text-bg-info text-dark st-badge"><i class="bi bi-hourglass-split"></i> Submitted for verification</span></a>
+      <a class="list-group-item list-group-item-action d-flex gap-2" href="/scgms/en/tasks/5/"><i class="bi bi-megaphone text-danger"></i><div class="flex-grow-1">Escalation: <span class="code">TSK-2627-005</span> لم تصل بيانات درجات الفصل السابق من الكنترول؛ نحتاج توجيهًا للكنترول بإرسالها.<div class="small-muted">Dr. Abdallah Mamdouh · 2026-10-14</div></div></a>
+      <a class="list-group-item list-group-item-action d-flex gap-2" href="/scgms/en/tasks/6/"><i class="bi bi-calendar-plus text-warning"></i><div class="flex-grow-1">Extension request: <span class="code">TSK-2627-006</span> → Nov. 15, 2026<div class="small-muted">Eng. Nouran Elmasry: تأجيل موعد المتحدث الرئيسي إلى منتصف نوفمبر</div></div></a>
+      
+      <a class="list-group-item list-group-item-action d-flex gap-2" href="/scgms/en/tasks/9/"><i class="bi bi-alarm text-danger"></i><div class="flex-grow-1"><span class="code">MGT-2627-001</span> تقرير إحصائي بأعداد الطلاب المقيدين لمجلس الجامعة<div class="small-muted">Eng. Mohamed Khaled · 7 days overdue</div></div><span class="badge text-bg-danger  st-badge"><i class="bi bi-flag-fill"></i> Urgent</span></a><a class="list-group-item list-group-item-action d-flex gap-2" href="/scgms/en/tasks/2/"><i class="bi bi-alarm text-danger"></i><div class="flex-grow-1"><span class="code">TSK-2627-002</span> نشر الدليل على موقع الكلية وLMS<div class="small-muted">Eng. Mohamed Khaled · 6 days overdue</div></div><span class="badge text-bg-warning text-dark st-badge"><i class="bi bi-flag-fill"></i> High</span></a><a class="list-group-item list-group-item-action d-flex gap-2" href="/scgms/en/tasks/5/"><i class="bi bi-alarm text-danger"></i><div class="flex-grow-1"><span class="code">TSK-2627-005</span> إعداد آلية الطلاب المتعثرين وكشف المستهدفين<div class="small-muted">Eng. Seham Ahmed · 1 days overdue</div></div><span class="badge text-bg-info text-dark st-badge"><i class="bi bi-flag-fill"></i> Medium</span></a>
+      
+    </div></div>
+  </div>
+  <div class="col-xl-5">
+    <div class="card h-100"><div class="card-header"><i class="bi bi-lightning-charge text-danger"></i>Urgent management alerts<span class="ms-auto badge text-bg-danger">3</span></div>
+    <div class="list-group list-group-flush" style="max-height:360px;overflow:auto">
+      <a class="list-group-item list-group-item-action" href="/scgms/en/tasks/9/">
+        <div class="d-flex gap-2"><span class="code">MGT-2627-001</span><span class="flex-grow-1 text-truncate">تقرير إحصائي بأعداد الطلاب المقيدين لمجلس الجامعة</span><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Overdue</span></div>
+        <div class="d-flex gap-2 align-items-center mt-1"><div class="progress flex-grow-1"><div class="progress-bar " style="width:50%"></div></div><span class="small-muted">50% · Oct. 19, 2026</span></div></a>
+      <a class="list-group-item list-group-item-action" href="/scgms/en/tasks/11/">
+        <div class="d-flex gap-2"><span class="code">MGT-2627-003</span><span class="flex-grow-1 text-truncate">حصر احتياجات المعامل من التراخيص للفصل الثاني</span><span class="badge text-bg-info text-dark st-badge"><i class="bi bi-hourglass-split"></i> Submitted for verification</span></div>
+        <div class="d-flex gap-2 align-items-center mt-1"><div class="progress flex-grow-1"><div class="progress-bar " style="width:100%"></div></div><span class="small-muted">100% · Oct. 25, 2026</span></div></a>
+      <a class="list-group-item list-group-item-action" href="/scgms/en/tasks/10/">
+        <div class="d-flex gap-2"><span class="code">MGT-2627-002</span><span class="flex-grow-1 text-truncate">مراجعة توصيف المقررات قبل زيارة المراجعين</span><span class="badge text-bg-secondary  st-badge"><i class="bi bi-circle"></i> Not started</span></div>
+        <div class="d-flex gap-2 align-items-center mt-1"><div class="progress flex-grow-1"><div class="progress-bar " style="width:0%"></div></div><span class="small-muted">0% · Nov. 1, 2026</span></div></a>
+      
+    </div></div>
+  </div>
+</div>
+
+<div class="row g-2 mb-3 row-cols-2 row-cols-md-5">
+  <div class="col"><a class="kpi" href="/scgms/en/committees/"><div class="lbl">Active committees</div><div class="val">12</div></a></div>
+  <div class="col"><a class="kpi info" href="/scgms/en/committees/meetings/"><div class="lbl">Meetings held / scheduled</div><div class="val">7 <small>/ 10</small></div></a></div>
+  <div class="col"><a class="kpi good" href="/scgms/en/committees/moms/"><div class="lbl">MOM submission / approval rate</div><div class="val">86% <small>/ 67%</small></div></a></div>
+  <div class="col"><a class="kpi" href="/scgms/en/decisions/"><div class="lbl">Decisions issued</div><div class="val">7</div></a></div>
+  <div class="col"><a class="kpi warn" href="/scgms/en/decisions/"><div class="lbl">Decisions awaiting implementation</div><div class="val">5</div></a></div>
+  <div class="col"><a class="kpi good" href="/scgms/en/decisions/"><div class="lbl">Decisions implemented and verified</div><div class="val">1</div></a></div>
+  <div class="col"><a class="kpi info" href="/scgms/en/tasks/"><div class="lbl">Tasks completed / ongoing</div><div class="val">3 <small>/ 6</small></div></a></div>
+  <div class="col"><a class="kpi crit" href="/scgms/en/tasks/"><div class="lbl">Overdue tasks</div><div class="val">3</div></a></div>
+  <div class="col"><a class="kpi crit" href="/scgms/en/tasks/"><div class="lbl">Open urgent management tasks</div><div class="val">3</div></a></div>
+  <div class="col"><a class="kpi crit" href="#heat"><div class="lbl">Awaiting management approval · committees needing intervention</div><div class="val">1 <small>· 3</small></div></a></div>
+</div>
+
+<div class="row g-3 mb-3">
+  <div class="col-xl-7"><div class="card h-100"><div class="card-header">Committee performance comparison<span class="ms-auto small-muted">weighted score, click a bar to open the committee</span></div><div class="card-body"><div id="ch-perf" class="chart"></div></div></div></div>
+  <div class="col-xl-5"><div class="card h-100"><div class="card-header">Decision implementation</div><div class="card-body"><div id="ch-dec" class="chart"></div></div></div></div>
+  <div class="col-xl-7"><div class="card h-100"><div class="card-header">Task completion by committee</div><div class="card-body"><div id="ch-tasks" class="chart"></div></div></div></div>
+  <div class="col-xl-5"><div class="card h-100"><div class="card-header">MOM submission compliance<span class="ms-auto small-muted">% submitted on time</span></div><div class="card-body"><div id="ch-mom" class="chart"></div></div></div></div>
+  <div class="col-12" id="heat"><div class="card"><div class="card-header">Committee performance heatmap<span class="ms-auto small-muted">empty cell = nothing due yet</span></div><div class="card-body"><div id="ch-heat" class="chart"></div></div></div></div>
+  <div class="col-xl-6"><div class="card h-100"><div class="card-header">Monthly completion trend</div><div class="card-body"><div id="ch-trend" class="chart"></div></div></div></div>
+  <div class="col-xl-6"><div class="card h-100"><div class="card-header">Monthly meetings calendar<a class="ms-auto small" href="/scgms/en/calendar/">Full calendar</a></div><div class="card-body"><div id="cal"></div></div></div></div>
+</div>
+
+<div class="card mb-3"><div class="card-header"><i class="bi bi-alarm text-danger"></i>Overdue decisions and tasks<input class="form-control form-control-sm ms-auto" style="max-width:240px" placeholder="Search…" oninput="filterRows(this,'od-table')"></div>
+<div class="table-responsive"><table class="table table-hover align-middle" id="od-table">
+<thead><tr><th onclick="sortTable('od-table',0)">Type</th><th onclick="sortTable('od-table',1)">ID</th><th>Item</th><th onclick="sortTable('od-table',3)">Committee</th><th>Responsible</th><th onclick="sortTable('od-table',5)">Due</th><th onclick="sortTable('od-table',6,true)">Days overdue <i class="bi bi-arrow-down-up"></i></th><th>Status</th></tr></thead>
+<tbody><tr>
+<td>Decision</td>
+<td><a class="code" href="/scgms/en/decisions/2/">DEC-2627-SAE-002</a></td>
+<td>تفعيل تسجيل الحضور على LMS لجميع المقررات</td><td class="small">Student Affairs &amp; Examinations Committee</td>
+<td class="small">Eng. Abeer Sarhan</td>
+<td class="small">2026-10-10</td><td class="fw-bold text-danger">16</td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Overdue</span></td></tr>
+<tr>
+<td>Decision</td>
+<td><a class="code" href="/scgms/en/decisions/1/">DEC-2627-SAE-001</a></td>
+<td>إعداد دليل الطالب ونشره على موقع الكلية</td><td class="small">Student Affairs &amp; Examinations Committee</td>
+<td class="small">Dr. Engy Ragaey</td>
+<td class="small">2026-10-14</td><td class="fw-bold text-danger">12</td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Overdue</span></td></tr>
+<tr>
+<td>Task</td>
+<td><a class="code" href="/scgms/en/tasks/9/">MGT-2627-001</a></td>
+<td>تقرير إحصائي بأعداد الطلاب المقيدين لمجلس الجامعة</td><td class="small">Student Affairs &amp; Examinations Committee</td>
+<td class="small">Eng. Mohamed Khaled</td>
+<td class="small">2026-10-19</td><td class="fw-bold text-danger">7</td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Overdue</span></td></tr>
+<tr>
+<td>Task</td>
+<td><a class="code" href="/scgms/en/tasks/2/">TSK-2627-002</a></td>
+<td>نشر الدليل على موقع الكلية وLMS</td><td class="small">Student Affairs &amp; Examinations Committee</td>
+<td class="small">Eng. Mohamed Khaled</td>
+<td class="small">2026-10-20</td><td class="fw-bold text-danger">6</td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Overdue</span></td></tr>
+<tr>
+<td>Task</td>
+<td><a class="code" href="/scgms/en/tasks/5/">TSK-2627-005</a></td>
+<td>إعداد آلية الطلاب المتعثرين وكشف المستهدفين</td><td class="small">Academic Advising Committee</td>
+<td class="small">Eng. Seham Ahmed</td>
+<td class="small">2026-10-25</td><td class="fw-bold text-danger">1</td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Overdue</span></td></tr>
+<tr>
+<td>Decision</td>
+<td><a class="code" href="/scgms/en/decisions/5/">DEC-2627-ADV-002</a></td>
+<td>وضع آلية للتعامل مع الطلاب المتعثرين</td><td class="small">Academic Advising Committee</td>
+<td class="small">Eng. Seham Ahmed</td>
+<td class="small">2026-10-25</td><td class="fw-bold text-danger">1</td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Overdue</span></td></tr>
+</tbody></table></div></div>
+
+<div class="card"><div class="card-header">Committee scorecards<a class="ms-auto small" href="/scgms/en/reports/">How scores are calculated</a></div>
+<div class="table-responsive"><table class="table table-hover align-middle">
+<thead><tr><th>Committee</th><th class="text-center">Meeting compliance</th><th class="text-center">MOM submission compliance</th><th class="text-center">Decision implementation</th><th class="text-center">Task completion</th><th class="text-center">On-time completion</th><th class="text-center">Overdue</th><th class="text-center">Score</th><th>Status</th></tr></thead>
+<tbody><tr><td><a href="/scgms/en/committees/1/">Scientific Research Committee</a></td>
+<td class="text-center small">100%<div class="small-muted">1/1</div></td><td class="text-center small">100%<div class="small-muted">1/1</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td>
+<td class="text-center ">0</td>
+<td class="text-center fw-bold">100%</td><td><span class="badge text-bg-success  st-badge"><i class="bi bi-check-circle-fill"></i> On track</span></td></tr><tr><td><a href="/scgms/en/committees/2/">Library Committee</a></td>
+<td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td>
+<td class="text-center ">0</td>
+<td class="text-center fw-bold">—</td><td><span class="badge text-bg-warning text-dark st-badge"><i class="bi bi-exclamation-triangle-fill"></i> Needs attention</span></td></tr><tr><td><a href="/scgms/en/committees/3/">Student Affairs &amp; Examinations Committee</a></td>
+<td class="text-center small">100%<div class="small-muted">2/2</div></td><td class="text-center small">100%<div class="small-muted">2/2</div></td><td class="text-center small">0%<div class="small-muted">0/2</div></td><td class="text-center small">25%<div class="small-muted">1/4</div></td><td class="text-center small">25%<div class="small-muted">1/4</div></td>
+<td class="text-center text-danger fw-bold">4</td>
+<td class="text-center fw-bold">40%</td><td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Intervention needed</span></td></tr><tr><td><a href="/scgms/en/committees/4/">Laboratories Committee</a></td>
+<td class="text-center small">100%<div class="small-muted">1/1</div></td><td class="text-center small">0%<div class="small-muted">0/1</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">0%<div class="small-muted">0/1</div></td><td class="text-center small">0%<div class="small-muted">0/1</div></td>
+<td class="text-center ">0</td>
+<td class="text-center fw-bold">21%</td><td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Intervention needed</span></td></tr><tr><td><a href="/scgms/en/committees/5/">Follow-up &amp; Timetable Committee</a></td>
+<td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td>
+<td class="text-center ">0</td>
+<td class="text-center fw-bold">—</td><td><span class="badge text-bg-warning text-dark st-badge"><i class="bi bi-exclamation-triangle-fill"></i> Needs attention</span></td></tr><tr><td><a href="/scgms/en/committees/6/">Student Activities &amp; Seminars Committee</a></td>
+<td class="text-center small">100%<div class="small-muted">1/1</div></td><td class="text-center small">100%<div class="small-muted">1/1</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td>
+<td class="text-center ">0</td>
+<td class="text-center fw-bold">100%</td><td><span class="badge text-bg-success  st-badge"><i class="bi bi-check-circle-fill"></i> On track</span></td></tr><tr><td><a href="/scgms/en/committees/7/">Academic Advising Committee</a></td>
+<td class="text-center small">100%<div class="small-muted">1/1</div></td><td class="text-center small">100%<div class="small-muted">1/1</div></td><td class="text-center small">50%<div class="small-muted">1/2</div></td><td class="text-center small">50%<div class="small-muted">1/2</div></td><td class="text-center small">0%<div class="small-muted">0/2</div></td>
+<td class="text-center text-danger fw-bold">2</td>
+<td class="text-center fw-bold">55%</td><td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> Intervention needed</span></td></tr><tr><td><a href="/scgms/en/committees/8/">Quality Committee</a></td>
+<td class="text-center small">100%<div class="small-muted">1/1</div></td><td class="text-center small">100%<div class="small-muted">1/1</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td>
+<td class="text-center ">0</td>
+<td class="text-center fw-bold">100%</td><td><span class="badge text-bg-success  st-badge"><i class="bi bi-check-circle-fill"></i> On track</span></td></tr><tr><td><a href="/scgms/en/committees/9/">Examination Control</a></td>
+<td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td>
+<td class="text-center ">0</td>
+<td class="text-center fw-bold">—</td><td><span class="badge text-bg-warning text-dark st-badge"><i class="bi bi-exclamation-triangle-fill"></i> Needs attention</span></td></tr><tr><td><a href="/scgms/en/committees/10/">Student Training Committee</a></td>
+<td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td>
+<td class="text-center ">0</td>
+<td class="text-center fw-bold">—</td><td><span class="badge text-bg-warning text-dark st-badge"><i class="bi bi-exclamation-triangle-fill"></i> Needs attention</span></td></tr><tr><td><a href="/scgms/en/committees/11/">Agreements &amp; Partnerships Committee</a></td>
+<td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">100%<div class="small-muted">1/1</div></td><td class="text-center small">100%<div class="small-muted">1/1</div></td>
+<td class="text-center ">0</td>
+<td class="text-center fw-bold">100%</td><td><span class="badge text-bg-success  st-badge"><i class="bi bi-check-circle-fill"></i> On track</span></td></tr><tr><td><a href="/scgms/en/committees/12/">Heads of Academic Departments</a></td>
+<td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td><td class="text-center small">—<div class="small-muted">0/0</div></td>
+<td class="text-center ">0</td>
+<td class="text-center fw-bold">—</td><td><span class="badge text-bg-warning text-dark st-badge"><i class="bi bi-exclamation-triangle-fill"></i> Needs attention</span></td></tr></tbody></table></div></div>
+
+  </main>
+</div>
+<script src="/scgms/static/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/scgms/static/vendor/htmx/htmx.min.js"></script>
+
+<script id="charts-data" type="application/json">{"performance": {"labels": ["Scientific Research Committee", "Student Activities \u0026 Seminars Committee", "Quality Committee", "Agreements \u0026 Partnerships Committee", "Academic Advising Committee", "Student Affairs \u0026 Examinations Committee", "Laboratories Committee", "Library Committee", "Follow-up \u0026 Timetable Committee", "Examination Control", "Student Training Committee", "Heads of Academic Departments"], "values": [100, 100, 100, 100, 55, 40, 21, null, null, null, null, null], "urls": ["/committees/1/", "/committees/6/", "/committees/8/", "/committees/11/", "/committees/7/", "/committees/3/", "/committees/4/", "/committees/2/", "/committees/5/", "/committees/9/", "/committees/10/", "/committees/12/"]}, "mom": {"labels": ["Scientific Research Committee", "Library Committee", "Student Affairs \u0026 Examinations Committee", "Laboratories Committee", "Follow-up \u0026 Timetable Committee", "Student Activities \u0026 Seminars Committee", "Academic Advising Committee", "Quality Committee", "Examination Control", "Student Training Committee", "Agreements \u0026 Partnerships Committee", "Heads of Academic Departments"], "values": [100, null, 100, 0, null, 100, 100, 100, null, null, null, null], "urls": ["/committees/1/", "/committees/2/", "/committees/3/", "/committees/4/", "/committees/5/", "/committees/6/", "/committees/7/", "/committees/8/", "/committees/9/", "/committees/10/", "/committees/11/", "/committees/12/"]}, "heat": {"y": ["Scientific Research Committee", "Library Committee", "Student Affairs \u0026 Examinations Committee", "Laboratories Committee", "Follow-up \u0026 Timetable Committee", "Student Activities \u0026 Seminars Committee", "Academic Advising Committee", "Quality Committee", "Examination Control", "Student Training Committee", "Agreements \u0026 Partnerships Committee", "Heads of Academic Departments"], "urls": ["/committees/1/", "/committees/2/", "/committees/3/", "/committees/4/", "/committees/5/", "/committees/6/", "/committees/7/", "/committees/8/", "/committees/9/", "/committees/10/", "/committees/11/", "/committees/12/"], "x": ["Meeting compliance", "MOM submission compliance", "Decision implementation", "Task completion", "On-time completion"], "z": [[100, 100, null, null, null], [null, null, null, null, null], [100, 100, 0, 25, 25], [100, 0, null, 0, 0], [null, null, null, null, null], [100, 100, null, null, null], [100, 100, 50, 50, 0], [100, 100, null, null, null], [null, null, null, null, null], [null, null, null, null, null], [null, null, null, 100, 100], [null, null, null, null, null]]}, "decisions": {"assigned": 1, "in_progress": 1, "overdue": 3, "implemented": 1}, "tasks": {"labels": ["Scientific Research Committee", "Library Committee", "Student Affairs \u0026 Examinations Committee", "Laboratories Committee", "Follow-up \u0026 Timetable Committee", "Student Activities \u0026 Seminars Committee", "Academic Advising Committee", "Quality Committee", "Examination Control", "Student Training Committee", "Agreements \u0026 Partnerships Committee", "Heads of Academic Departments"], "urls": ["/committees/1/", "/committees/2/", "/committees/3/", "/committees/4/", "/committees/5/", "/committees/6/", "/committees/7/", "/committees/8/", "/committees/9/", "/committees/10/", "/committees/11/", "/committees/12/"], "series": {"verified": [0, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1, 0], "submitted": [0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0], "in_progress": [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0], "not_started": [2, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0], "blocked": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "returned": [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], "overdue": [0, 0, 2, 0, 0, 0, 1, 0, 0, 0, 0, 0]}}, "trend": {"labels": ["2026-09", "2026-10"], "due": [1, 7], "verified": [0, 3]}}</script>
+<script src="/scgms/static/vendor/plotly/plotly.min.js"></script>
+<script src="/scgms/static/vendor/fullcalendar/index.global.min.js"></script>
+<script src="/scgms/static/vendor/fullcalendar/ar.global.min.js"></script>
+<script src="/scgms/static/js/charts.js"></script>
+<script>
+const L = {
+  verified: "Verified", submitted: "Awaiting verification", in_progress: "In progress",
+  not_started: "Not started", blocked: "Blocked", returned: "Returned", overdue: "Overdue",
+  implemented: "Implemented", assigned: "Assigned", registered: "No tasks yet",
+  due: "Tasks due", done: "Tasks verified", score: "Score", pct: "% on time"
+};
+drawOverview(JSON.parse(document.getElementById('charts-data').textContent), L);
+drawCalendar('cal', "/calendar/events.json", {height: 420});
+</script>
+
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));</script></body>
+</html>

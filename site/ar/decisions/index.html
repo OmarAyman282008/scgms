@@ -1,0 +1,138 @@
+<!doctype html>
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>القرارات وبنود العمل · SCGMS</title>
+<link rel="icon" href="/scgms/static/img/logo.jpg">
+<link rel="stylesheet" href="/scgms/static/vendor/bootstrap/bootstrap.rtl.min.css">
+<link rel="stylesheet" href="/scgms/static/vendor/icons/bootstrap-icons.min.css">
+<link rel="stylesheet" href="/scgms/static/css/app.css">
+
+</head>
+<body hx-headers='{"X-CSRFToken": "jwURp7JMEHonbnySlEbjf66j4mlwb7zHL4yFc8HZMGPZLimONuUajsRxsR7UWMpo"}'><div style="background:#fff3cd;color:#664d03;text-align:center;padding:6px 10px;font-size:13px;border-bottom:1px solid #ffe69c;position:sticky;top:0;z-index:2000">نسخة عرض ثابتة – لقطة للقراءة فقط ببيانات تجريبية. النماذج وتسجيل الدخول والرفع والتصدير معطّلة.</div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="/scgms/static/img/logo.jpg" alt="">
+    <div><b>حوكمة اللجان</b><small>كلية الحاسبات وعلوم البيانات</small></div>
+  </div>
+  <nav class="nav flex-column">
+    
+    <a class="nav-link " href="/scgms/ar/overview/"><i class="bi bi-speedometer2"></i>النظرة التنفيذية العامة</a>
+    
+    <a class="nav-link " href="/scgms/ar/me/"><i class="bi bi-person-workspace"></i>لوحتي</a>
+    <a class="nav-link " href="/scgms/ar/committees/"><i class="bi bi-diagram-3"></i>اللجان</a>
+    <a class="nav-link " href="/scgms/ar/committees/meetings/"><i class="bi bi-calendar3"></i>اجتماعات اللجان</a>
+    <a class="nav-link " href="/scgms/ar/committees/moms/"><i class="bi bi-file-earmark-text"></i>المحاضر والاعتمادات</a>
+    <a class="nav-link active" href="/scgms/ar/decisions/"><i class="bi bi-check2-square"></i>القرارات وبنود العمل</a>
+    <a class="nav-link " href="/scgms/ar/tasks/"><i class="bi bi-list-task"></i>إدارة المهام</a>
+    
+    <a class="nav-link " href="/scgms/ar/follow-up/"><i class="bi bi-bullseye"></i>مركز المتابعة الإدارية</a>
+    
+    <a class="nav-link " href="/scgms/ar/archive/"><i class="bi bi-archive"></i>الأرشيف الرقمي</a>
+    <a class="nav-link " href="/scgms/ar/reports/"><i class="bi bi-bar-chart-line"></i>التقارير والتحليلات</a>
+    <a class="nav-link " href="#" onclick="return false" data-disabled="1"><i class="bi bi-bell"></i>الإشعارات</a>
+    
+    <a class="nav-link " href="/scgms/ar/administration/"><i class="bi bi-gear"></i>الإدارة والإعدادات</a>
+    
+  </nav>
+  <div class="foot">جامعة باديا · SCGMS</div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <button class="btn btn-sm btn-outline-secondary d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="القائمة"><i class="bi bi-list"></i></button>
+    <div class="flex-grow-1"></div>
+    <a class="btn btn-sm btn-danger" href="#" onclick="return false" data-disabled="1"><i class="bi bi-lightning-charge-fill"></i> إسناد مهمة عاجلة</a>
+    <a class="btn btn-sm btn-outline-secondary" href="/scgms/en/decisions/">English</a>
+    <a href="#" onclick="return false" data-disabled="1" class="btn btn-sm btn-light position-relative" aria-label="الإشعارات"><i class="bi bi-bell"></i>
+      <span   ></span></a>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown"><span class="avatar">ما</span><span class="who d-none d-md-inline">مدير النظام</span></button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><span class="dropdown-item-text small-muted">مدير النظام</span></li>
+        <li><a class="dropdown-item" href="/scgms/ar/accounts/profile/">ملفي الشخصي</a></li>
+        <li><a class="dropdown-item" href="#" onclick="return false" data-disabled="1">تغيير كلمة المرور</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><form method="post" action="#" onclick="return false" data-disabled="1"><button class="dropdown-item">تسجيل الخروج</button></form></li>
+      </ul>
+    </div>
+  </header>
+  <main class="content">
+    
+    
+<div class="page-head"><div class="grow"><h1>القرارات وبنود العمل</h1><div class="sub">لا يُغلق القرار إلا بعد التحقق من جميع مهامه بالأدلة.</div></div></div>
+<form class="filters row g-2" method="get">
+<div class="col-md-3"><input class="form-control form-control-sm" name="q" value="" placeholder="ابحث بالرقم أو العنوان أو النص…"></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="committee"><option value="">جميع اللجان</option><option value="1" >لجنة البحث العلمي</option><option value="2" >لجنة المكتبات</option><option value="3" >لجنة شئون الطلاب والامتحانات</option><option value="4" >لجنة المختبرات</option><option value="5" >لجنة المتابعة والجدول</option><option value="6" >لجنة الأنشطة الطلابية والندوات</option><option value="7" >لجنة الإرشاد الأكاديمي</option><option value="8" >لجنة الجودة</option><option value="9" >الكنترول</option><option value="10" >لجنة تدريب الطلاب</option><option value="11" >لجنة الاتفاقيات</option><option value="12" >رؤساء الأقسام العلمية</option></select></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="status"><option value="">أي حالة</option><option value="registered" >مسجل — بدون مهام بعد</option><option value="assigned" >تم الإسناد</option><option value="in_progress" >قيد التنفيذ</option><option value="implemented" >منفذ وتم التحقق</option><option value="noted" >للعلم (غير تنفيذي)</option><option value="cancelled" >ملغى</option><option value="superseded" >تم استبداله</option></select></div>
+<div class="col-md-1"><select class="form-select form-select-sm" name="priority"><option value="">الأولوية</option><option value="low" >منخفضة</option><option value="medium" >متوسطة</option><option value="high" >عالية</option><option value="urgent" >عاجلة</option></select></div>
+<div class="col-md-2"><select class="form-select form-select-sm" name="person"><option value="">المسؤول</option><option value="5" >أ.د/ جابر عثمان</option><option value="3" >أ.د/ غادة خريبة</option><option value="4" >أ.د/ غادة عبدالهادي</option><option value="2" >أ.د/ محمد حلمي خفاجي</option><option value="10" >د/ أميرة جابر</option><option value="11" >د/ أميرة عفيفي</option><option value="8" >د/ إنجي رجائي</option><option value="13" >د/ إياد ممدوح</option><option value="7" >د/ عبدالله ممدوح</option><option value="12" >د/ محمد ممدوح</option><option value="9" >د/ مروة العناني</option><option value="6" >د/ نهى مختار</option><option value="26" >م/ بسنت حسن</option><option value="23" >م/ رنا أبوزيد</option><option value="14" >م/ رنا حامد</option><option value="15" >م/ زياد نبيل</option><option value="22" >م/ سلوى مبروك</option><option value="21" >م/ سهام أحمد</option><option value="20" >م/ سهام علي</option><option value="24" >م/ عبد الرحمن معوض</option><option value="19" >م/ عبير سرحان</option><option value="16" >م/ محمد حلمي</option><option value="18" >م/ محمد خالد</option><option value="17" >م/ محمد عبده</option><option value="25" >م/ نوران المصري</option><option value="1" >مدير النظام</option></select></div>
+<div class="col-md-1 form-check d-flex align-items-center gap-1 ps-4"><input type="checkbox" class="form-check-input" name="overdue" value="1" id="ov" ><label for="ov" class="small">متأخر</label></div>
+<div class="col-md-1"><button class="btn btn-sm btn-primary w-100">تصفية</button></div></form>
+<div class="card">
+<div class="table-responsive"><table class="table table-hover align-middle">
+<thead><tr><th>رقم القرار</th><th>القرار</th><th>لجنة</th><th>المسؤول</th><th>التاريخ المستهدف</th><th>التنفيذ</th><th>الحالة</th></tr></thead>
+<tbody><tr>
+<td><a class="code" href="/scgms/ar/decisions/7/">DEC-2627-RES-001</a> <span class="demo-tag">DEMO</span></td>
+<td><a class="text-body" href="/scgms/ar/decisions/7/">إعداد مقترح مشروع بحثي ممول لتقديمه لأكاديمية البحث العلمي</a></td>
+<td class="small">لجنة البحث العلمي</td><td class="small">أ.د/ غادة خريبة</td>
+<td class="small ">2026-12-15</td>
+<td style="min-width:110px"><div class="progress"><div class="progress-bar " style="width:0%"></div></div><span class="small-muted">0%</span></td>
+<td><span class="badge text-bg-info text-dark st-badge"><i class="bi bi-hourglass-split"></i> تم الإسناد</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/ar/decisions/6/">DEC-2627-ACT-001</a> <span class="demo-tag">DEMO</span></td>
+<td><a class="text-body" href="/scgms/ar/decisions/6/">تنظيم ندوة عن الذكاء الاصطناعي التوليدي للطلاب</a></td>
+<td class="small">لجنة الأنشطة الطلابية والندوات</td><td class="small">م/ نوران المصري</td>
+<td class="small ">2026-11-05</td>
+<td style="min-width:110px"><div class="progress"><div class="progress-bar " style="width:0%"></div></div><span class="small-muted">0%</span></td>
+<td><span class="badge text-bg-primary  st-badge"><i class="bi bi-arrow-repeat"></i> قيد التنفيذ</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/ar/decisions/5/">DEC-2627-ADV-002</a> <span class="demo-tag">DEMO</span></td>
+<td><a class="text-body" href="/scgms/ar/decisions/5/">وضع آلية للتعامل مع الطلاب المتعثرين</a></td>
+<td class="small">لجنة الإرشاد الأكاديمي</td><td class="small">م/ سهام أحمد</td>
+<td class="small text-danger fw-bold">2026-10-25</td>
+<td style="min-width:110px"><div class="progress"><div class="progress-bar " style="width:0%"></div></div><span class="small-muted">0%</span></td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> متأخر</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/ar/decisions/4/">DEC-2627-ADV-001</a> <span class="demo-tag">DEMO</span></td>
+<td><a class="text-body" href="/scgms/ar/decisions/4/">توزيع المرشدين الأكاديميين على الطلاب</a></td>
+<td class="small">لجنة الإرشاد الأكاديمي</td><td class="small">م/ عبير سرحان</td>
+<td class="small ">2026-09-30</td>
+<td style="min-width:110px"><div class="progress"><div class="progress-bar bg-success" style="width:100%"></div></div><span class="small-muted">100%</span></td>
+<td><span class="badge text-bg-success  st-badge"><i class="bi bi-check-circle-fill"></i> منفذ وتم التحقق</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/ar/decisions/3/">DEC-2627-SAE-003</a> <span class="demo-tag">DEMO</span></td>
+<td><a class="text-body" href="/scgms/ar/decisions/3/">العلم بجدول الامتحانات النصفية المعتمد</a></td>
+<td class="small">لجنة شئون الطلاب والامتحانات</td><td class="small">—</td>
+<td class="small ">—</td>
+<td style="min-width:110px"><div class="progress"><div class="progress-bar " style="width:0%"></div></div><span class="small-muted">0%</span></td>
+<td><span class="badge text-bg-light text-dark st-badge"><i class="bi bi-dash-circle"></i> للعلم (غير تنفيذي)</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/ar/decisions/2/">DEC-2627-SAE-002</a> <span class="demo-tag">DEMO</span></td>
+<td><a class="text-body" href="/scgms/ar/decisions/2/">تفعيل تسجيل الحضور على LMS لجميع المقررات</a></td>
+<td class="small">لجنة شئون الطلاب والامتحانات</td><td class="small">م/ عبير سرحان</td>
+<td class="small text-danger fw-bold">2026-10-10</td>
+<td style="min-width:110px"><div class="progress"><div class="progress-bar " style="width:0%"></div></div><span class="small-muted">0%</span></td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> متأخر</span></td></tr>
+<tr>
+<td><a class="code" href="/scgms/ar/decisions/1/">DEC-2627-SAE-001</a> <span class="demo-tag">DEMO</span></td>
+<td><a class="text-body" href="/scgms/ar/decisions/1/">إعداد دليل الطالب ونشره على موقع الكلية</a></td>
+<td class="small">لجنة شئون الطلاب والامتحانات</td><td class="small">د/ إنجي رجائي</td>
+<td class="small text-danger fw-bold">2026-10-14</td>
+<td style="min-width:110px"><div class="progress"><div class="progress-bar " style="width:50%"></div></div><span class="small-muted">50%</span></td>
+<td><span class="badge text-bg-danger  st-badge"><i class="bi bi-exclamation-octagon-fill"></i> متأخر</span></td></tr>
+</tbody></table></div>
+</div>
+
+
+
+  </main>
+</div>
+<script src="/scgms/static/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/scgms/static/vendor/htmx/htmx.min.js"></script>
+
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));</script></body>
+</html>

@@ -1,0 +1,178 @@
+<!doctype html>
+
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings · SCGMS</title>
+<link rel="icon" href="/scgms/static/img/logo.jpg">
+<link rel="stylesheet" href="/scgms/static/vendor/bootstrap/bootstrap.min.css">
+<link rel="stylesheet" href="/scgms/static/vendor/icons/bootstrap-icons.min.css">
+<link rel="stylesheet" href="/scgms/static/css/app.css">
+
+</head>
+<body hx-headers='{"X-CSRFToken": "OJ9DbV9FFI3bDtYPWDZXfDV2QCIgb0TJYQUGjWO56OvHkgHgyGdtgyTISDrQaNOj"}'><div style="background:#fff3cd;color:#664d03;text-align:center;padding:6px 10px;font-size:13px;border-bottom:1px solid #ffe69c;position:sticky;top:0;z-index:2000">Static demo – read-only snapshot with sample data. Forms, login, uploads and exports are disabled.</div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="/scgms/static/img/logo.jpg" alt="">
+    <div><b>Committee Governance</b><small>School of Computing and Data Science</small></div>
+  </div>
+  <nav class="nav flex-column">
+    
+    <a class="nav-link " href="/scgms/en/overview/"><i class="bi bi-speedometer2"></i>Executive Overview</a>
+    
+    <a class="nav-link " href="/scgms/en/me/"><i class="bi bi-person-workspace"></i>My Dashboard</a>
+    <a class="nav-link " href="/scgms/en/committees/"><i class="bi bi-diagram-3"></i>Committees</a>
+    <a class="nav-link " href="/scgms/en/committees/meetings/"><i class="bi bi-calendar3"></i>Committee Meetings</a>
+    <a class="nav-link " href="/scgms/en/committees/moms/"><i class="bi bi-file-earmark-text"></i>MOMs & Approvals</a>
+    <a class="nav-link " href="/scgms/en/decisions/"><i class="bi bi-check2-square"></i>Decisions & Action Items</a>
+    <a class="nav-link " href="/scgms/en/tasks/"><i class="bi bi-list-task"></i>Task Management</a>
+    
+    <a class="nav-link " href="/scgms/en/follow-up/"><i class="bi bi-bullseye"></i>Management Follow-Up Center</a>
+    
+    <a class="nav-link " href="/scgms/en/archive/"><i class="bi bi-archive"></i>Digital Filing Archive</a>
+    <a class="nav-link " href="/scgms/en/reports/"><i class="bi bi-bar-chart-line"></i>Reports & Analytics</a>
+    <a class="nav-link " href="#" onclick="return false" data-disabled="1"><i class="bi bi-bell"></i>Notifications</a>
+    
+    <a class="nav-link active" href="/scgms/en/administration/"><i class="bi bi-gear"></i>Administration & Settings</a>
+    
+  </nav>
+  <div class="foot">Badya University · SCGMS</div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <button class="btn btn-sm btn-outline-secondary d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="Menu"><i class="bi bi-list"></i></button>
+    <div class="flex-grow-1"></div>
+    <a class="btn btn-sm btn-danger" href="#" onclick="return false" data-disabled="1"><i class="bi bi-lightning-charge-fill"></i> Assign Urgent Task</a>
+    <a class="btn btn-sm btn-outline-secondary" href="/scgms/ar/administration/settings/">العربية</a>
+    <a href="#" onclick="return false" data-disabled="1" class="btn btn-sm btn-light position-relative" aria-label="Notifications"><i class="bi bi-bell"></i>
+      <span   ></span></a>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown"><span class="avatar">SA</span><span class="who d-none d-md-inline">System Administrator</span></button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><span class="dropdown-item-text small-muted">System Administrator</span></li>
+        <li><a class="dropdown-item" href="/scgms/en/accounts/profile/">My profile</a></li>
+        <li><a class="dropdown-item" href="#" onclick="return false" data-disabled="1">Change password</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><form method="post" action="#" onclick="return false" data-disabled="1"><button class="dropdown-item">Log out</button></form></li>
+      </ul>
+    </div>
+  </header>
+  <main class="content">
+    
+    
+<div class="page-head"><div class="grow"><h1>Policy settings and KPI weights</h1></div></div>
+<div class="row g-3"><div class="col-lg-7"><div class="card"><div class="card-body"><form method="post">
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_mom_grace_days">Days allowed to submit a MOM after the meeting <span class="text-danger">*</span></label>
+    <input type="number" name="mom_grace_days" value="7" min="0" required id="id_mom_grace_days">
+  
+  
+  
+</div>
+
+<div class="mb-3 form-check">
+  
+    <input type="checkbox" class="form-check-input" name="mom_requires_management_approval" id="id_mom_requires_management_approval" checked>
+    <label class="form-check-label" for="id_mom_requires_management_approval">MOMs need management approval after the chair</label>
+  
+  
+  
+</div>
+
+<div class="mb-3 form-check">
+  
+    <input type="checkbox" class="form-check-input" name="email_notifications_enabled" id="id_email_notifications_enabled" >
+    <label class="form-check-label" for="id_email_notifications_enabled">Send e-mail notifications</label>
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_meeting_reminder_days">Remind members N days before a meeting <span class="text-danger">*</span></label>
+    <input type="number" name="meeting_reminder_days" value="2" min="0" required id="id_meeting_reminder_days">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_task_due_soon_days">Warn N days before a task deadline <span class="text-danger">*</span></label>
+    <input type="number" name="task_due_soon_days" value="3" min="0" required id="id_task_due_soon_days">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_escalate_after_overdue_days">Flag for management after N overdue days <span class="text-danger">*</span></label>
+    <input type="number" name="escalate_after_overdue_days" value="7" min="0" required id="id_escalate_after_overdue_days">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_w_meeting">Weight: meeting compliance <span class="text-danger">*</span></label>
+    <input type="number" name="w_meeting" value="15" min="0" required id="id_w_meeting">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_w_mom">Weight: MOM submission compliance <span class="text-danger">*</span></label>
+    <input type="number" name="w_mom" value="15" min="0" required id="id_w_mom">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_w_decision">Weight: decision implementation <span class="text-danger">*</span></label>
+    <input type="number" name="w_decision" value="30" min="0" required id="id_w_decision">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_w_task">Weight: task completion <span class="text-danger">*</span></label>
+    <input type="number" name="w_task" value="20" min="0" required id="id_w_task">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_w_ontime">Weight: on-time completion <span class="text-danger">*</span></label>
+    <input type="number" name="w_ontime" value="20" min="0" required id="id_w_ontime">
+  
+  
+  
+</div>
+
+<button class="btn btn-primary">Save</button></form></div></div></div>
+<div class="col-lg-5"><div class="card"><div class="card-header">KPI formulas</div><ul class="list-group list-group-flush">
+<li class="list-group-item"><b>Meeting compliance</b><div class="small">Meetings held ÷ meetings scheduled up to the cut-off date (cancelled excluded)</div></li><li class="list-group-item"><b>MOM submission compliance</b><div class="small">MOMs submitted within the grace period ÷ held meetings whose MOM is due</div></li><li class="list-group-item"><b>Decision implementation</b><div class="small">Actionable decisions implemented and verified ÷ actionable decisions due (target date passed, or closed)</div></li><li class="list-group-item"><b>Task completion</b><div class="small">Tasks verified ÷ tasks due (deadline passed, or verified) — cancelled excluded</div></li><li class="list-group-item"><b>On-time completion</b><div class="small">Tasks verified on or before their deadline ÷ tasks due</div></li>
+<li class="list-group-item small">Overall score = weighted average of the rates that have something due; rates with nothing due are left out and the remaining weights are re-scaled. Counts of meetings, decisions or tasks never raise the score.</li></ul></div></div></div>
+
+  </main>
+</div>
+<script src="/scgms/static/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/scgms/static/vendor/htmx/htmx.min.js"></script>
+
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));</script></body>
+</html>

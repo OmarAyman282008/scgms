@@ -1,0 +1,178 @@
+<!doctype html>
+
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>الإعدادات · SCGMS</title>
+<link rel="icon" href="/scgms/static/img/logo.jpg">
+<link rel="stylesheet" href="/scgms/static/vendor/bootstrap/bootstrap.rtl.min.css">
+<link rel="stylesheet" href="/scgms/static/vendor/icons/bootstrap-icons.min.css">
+<link rel="stylesheet" href="/scgms/static/css/app.css">
+
+</head>
+<body hx-headers='{"X-CSRFToken": "ocL8FTT3yxKlgMzHrzyJoETMNWzfG3kSQKpWsURgGwbXQHnDTphAs0E0brlDrIaz"}'><div style="background:#fff3cd;color:#664d03;text-align:center;padding:6px 10px;font-size:13px;border-bottom:1px solid #ffe69c;position:sticky;top:0;z-index:2000">نسخة عرض ثابتة – لقطة للقراءة فقط ببيانات تجريبية. النماذج وتسجيل الدخول والرفع والتصدير معطّلة.</div>
+
+<aside class="sidebar" id="sidebar">
+  <div class="brand">
+    <img src="/scgms/static/img/logo.jpg" alt="">
+    <div><b>حوكمة اللجان</b><small>كلية الحاسبات وعلوم البيانات</small></div>
+  </div>
+  <nav class="nav flex-column">
+    
+    <a class="nav-link " href="/scgms/ar/overview/"><i class="bi bi-speedometer2"></i>النظرة التنفيذية العامة</a>
+    
+    <a class="nav-link " href="/scgms/ar/me/"><i class="bi bi-person-workspace"></i>لوحتي</a>
+    <a class="nav-link " href="/scgms/ar/committees/"><i class="bi bi-diagram-3"></i>اللجان</a>
+    <a class="nav-link " href="/scgms/ar/committees/meetings/"><i class="bi bi-calendar3"></i>اجتماعات اللجان</a>
+    <a class="nav-link " href="/scgms/ar/committees/moms/"><i class="bi bi-file-earmark-text"></i>المحاضر والاعتمادات</a>
+    <a class="nav-link " href="/scgms/ar/decisions/"><i class="bi bi-check2-square"></i>القرارات وبنود العمل</a>
+    <a class="nav-link " href="/scgms/ar/tasks/"><i class="bi bi-list-task"></i>إدارة المهام</a>
+    
+    <a class="nav-link " href="/scgms/ar/follow-up/"><i class="bi bi-bullseye"></i>مركز المتابعة الإدارية</a>
+    
+    <a class="nav-link " href="/scgms/ar/archive/"><i class="bi bi-archive"></i>الأرشيف الرقمي</a>
+    <a class="nav-link " href="/scgms/ar/reports/"><i class="bi bi-bar-chart-line"></i>التقارير والتحليلات</a>
+    <a class="nav-link " href="#" onclick="return false" data-disabled="1"><i class="bi bi-bell"></i>الإشعارات</a>
+    
+    <a class="nav-link active" href="/scgms/ar/administration/"><i class="bi bi-gear"></i>الإدارة والإعدادات</a>
+    
+  </nav>
+  <div class="foot">جامعة باديا · SCGMS</div>
+</aside>
+
+<div class="main">
+  <header class="topbar">
+    <button class="btn btn-sm btn-outline-secondary d-lg-none" onclick="document.getElementById('sidebar').classList.toggle('open')" aria-label="القائمة"><i class="bi bi-list"></i></button>
+    <div class="flex-grow-1"></div>
+    <a class="btn btn-sm btn-danger" href="#" onclick="return false" data-disabled="1"><i class="bi bi-lightning-charge-fill"></i> إسناد مهمة عاجلة</a>
+    <a class="btn btn-sm btn-outline-secondary" href="/scgms/en/administration/settings/">English</a>
+    <a href="#" onclick="return false" data-disabled="1" class="btn btn-sm btn-light position-relative" aria-label="الإشعارات"><i class="bi bi-bell"></i>
+      <span   ></span></a>
+    <div class="dropdown">
+      <button class="btn btn-sm btn-light dropdown-toggle d-flex align-items-center gap-2" data-bs-toggle="dropdown"><span class="avatar">ما</span><span class="who d-none d-md-inline">مدير النظام</span></button>
+      <ul class="dropdown-menu dropdown-menu-end">
+        <li><span class="dropdown-item-text small-muted">مدير النظام</span></li>
+        <li><a class="dropdown-item" href="/scgms/ar/accounts/profile/">ملفي الشخصي</a></li>
+        <li><a class="dropdown-item" href="#" onclick="return false" data-disabled="1">تغيير كلمة المرور</a></li>
+        <li><hr class="dropdown-divider"></li>
+        <li><form method="post" action="#" onclick="return false" data-disabled="1"><button class="dropdown-item">تسجيل الخروج</button></form></li>
+      </ul>
+    </div>
+  </header>
+  <main class="content">
+    
+    
+<div class="page-head"><div class="grow"><h1>إعدادات السياسات وأوزان المؤشرات</h1></div></div>
+<div class="row g-3"><div class="col-lg-7"><div class="card"><div class="card-body"><form method="post">
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_mom_grace_days">عدد الأيام المسموح بها لرفع المحضر بعد الاجتماع <span class="text-danger">*</span></label>
+    <input type="number" name="mom_grace_days" value="7" min="0" required id="id_mom_grace_days">
+  
+  
+  
+</div>
+
+<div class="mb-3 form-check">
+  
+    <input type="checkbox" class="form-check-input" name="mom_requires_management_approval" id="id_mom_requires_management_approval" checked>
+    <label class="form-check-label" for="id_mom_requires_management_approval">المحاضر تحتاج اعتماد الإدارة بعد رئيس اللجنة</label>
+  
+  
+  
+</div>
+
+<div class="mb-3 form-check">
+  
+    <input type="checkbox" class="form-check-input" name="email_notifications_enabled" id="id_email_notifications_enabled" >
+    <label class="form-check-label" for="id_email_notifications_enabled">إرسال إشعارات بالبريد الإلكتروني</label>
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_meeting_reminder_days">تذكير الأعضاء قبل الاجتماع بعدد أيام <span class="text-danger">*</span></label>
+    <input type="number" name="meeting_reminder_days" value="2" min="0" required id="id_meeting_reminder_days">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_task_due_soon_days">التنبيه قبل موعد المهمة بعدد أيام <span class="text-danger">*</span></label>
+    <input type="number" name="task_due_soon_days" value="3" min="0" required id="id_task_due_soon_days">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_escalate_after_overdue_days">الإحالة للإدارة بعد عدد أيام من التأخير <span class="text-danger">*</span></label>
+    <input type="number" name="escalate_after_overdue_days" value="7" min="0" required id="id_escalate_after_overdue_days">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_w_meeting">الوزن: الالتزام بالاجتماعات <span class="text-danger">*</span></label>
+    <input type="number" name="w_meeting" value="15" min="0" required id="id_w_meeting">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_w_mom">الوزن: الالتزام برفع المحاضر <span class="text-danger">*</span></label>
+    <input type="number" name="w_mom" value="15" min="0" required id="id_w_mom">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_w_decision">الوزن: تنفيذ القرارات <span class="text-danger">*</span></label>
+    <input type="number" name="w_decision" value="30" min="0" required id="id_w_decision">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_w_task">الوزن: إنجاز المهام <span class="text-danger">*</span></label>
+    <input type="number" name="w_task" value="20" min="0" required id="id_w_task">
+  
+  
+  
+</div>
+
+<div class="mb-3 ">
+  
+    <label class="form-label" for="id_w_ontime">الوزن: الإنجاز في الموعد <span class="text-danger">*</span></label>
+    <input type="number" name="w_ontime" value="20" min="0" required id="id_w_ontime">
+  
+  
+  
+</div>
+
+<button class="btn btn-primary">حفظ</button></form></div></div></div>
+<div class="col-lg-5"><div class="card"><div class="card-header">معادلات المؤشرات</div><ul class="list-group list-group-flush">
+<li class="list-group-item"><b>الالتزام بعقد الاجتماعات</b><div class="small">الاجتماعات المنعقدة ÷ الاجتماعات المجدولة حتى تاريخ القياس (دون الملغاة)</div></li><li class="list-group-item"><b>الالتزام برفع المحاضر</b><div class="small">المحاضر المرفوعة خلال المهلة ÷ الاجتماعات المنعقدة المستحق محضرها</div></li><li class="list-group-item"><b>تنفيذ القرارات</b><div class="small">القرارات المنفذة والمتحقق منها ÷ القرارات القابلة للتنفيذ المستحقة</div></li><li class="list-group-item"><b>إنجاز المهام</b><div class="small">المهام المتحقق منها ÷ المهام المستحقة (دون الملغاة)</div></li><li class="list-group-item"><b>الإنجاز في الموعد</b><div class="small">المهام المتحقق منها في موعدها ÷ المهام المستحقة</div></li>
+<li class="list-group-item small">الدرجة الإجمالية = المتوسط المرجح للنسب التي لها مستحقات؛ تُستبعد النسب التي ليس لها مستحق ويُعاد توزيع الأوزان المتبقية. عدد الاجتماعات أو القرارات أو المهام لا يرفع الدرجة أبدًا.</li></ul></div></div></div>
+
+  </main>
+</div>
+<script src="/scgms/static/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="/scgms/static/vendor/htmx/htmx.min.js"></script>
+
+<script>document.querySelectorAll('form').forEach(f=>f.addEventListener('submit',e=>e.preventDefault()));</script></body>
+</html>
